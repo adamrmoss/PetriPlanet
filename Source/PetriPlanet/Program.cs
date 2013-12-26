@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PetriPlanet.Core.Simulations;
 
 namespace PetriPlanet
 {
-  static class Program
+  internal static class Program
   {
-    /// <summary>
-    /// The main entry point for the application.
-    /// </summary>
+    private const int width = 64;
+    private const int height = 48;
+
     [STAThread]
-    static void Main() {
+    internal static void Main()
+    {
+      var simulation = Simulation.Build(width, height);
+      var simulationController = SimulationController.Build(simulation);
+      var simulationForm = new SimulationForm().SetController(simulationController);
+
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
-      Application.Run(new Form1());
+      Application.Run(simulationForm);
     }
   }
 }
