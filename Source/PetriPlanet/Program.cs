@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using PetriPlanet.Core.Simulations;
+using PetriPlanet.Core.Experiments;
 
 namespace PetriPlanet
 {
@@ -15,13 +15,15 @@ namespace PetriPlanet
     [STAThread]
     internal static void Main()
     {
-      var simulation = Simulation.Build(width, height);
-      var simulationController = SimulationController.Build(simulation);
-      var simulationForm = new SimulationForm().SetController(simulationController);
+      var simulation = Experiment.Build(width, height);
+      var simulationController = ExperimentController.Build(simulation);
 
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
-      Application.Run(simulationForm);
+
+      var experimentForm = new ExperimentForm().SetController(simulationController);
+      experimentForm.Start();
+      Application.Run(experimentForm);
     }
   }
 }

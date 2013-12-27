@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PetriPlanet.Core.Simulations
+namespace PetriPlanet.Core.Experiments
 {
   public enum WorldGridElementType
   {

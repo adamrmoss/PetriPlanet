@@ -1,4 +1,4 @@
-﻿namespace PetriPlanet.Core.Simulations
+﻿namespace PetriPlanet.Core.Experiments
 {
   public class Organism
   {
