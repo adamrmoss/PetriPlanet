@@ -5,9 +5,14 @@ namespace PetriPlanet
 {
   public class WorldCanvas : Control
   {
-    private const int worldGridSize = 32;
+    private const int worldGridSize = 16;
 
     public WorldCanvas(int width, int height)
+    {
+      this.Initialize(width, height);
+    }
+
+    private void Initialize(int width, int height)
     {
       this.Width = width * worldGridSize;
       this.Height = height * worldGridSize;
@@ -17,8 +22,8 @@ namespace PetriPlanet
     {
       base.OnPaint(e);
 
-      var pen = new Pen(Color.DarkGray);
-      e.Graphics.DrawRectangle(pen, 0, 0, this.Width, this.Height);
+      var brush = new SolidBrush(Color.DarkGray);
+      e.Graphics.FillRectangle(brush, 0, 0, this.Width, this.Height);
     }
   }
 }

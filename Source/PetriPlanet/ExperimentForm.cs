@@ -15,6 +15,8 @@ namespace PetriPlanet
     private void Initialize()
     {
       this.Text = "Petri Planet";
+      this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+      this.AutoSize = true;
     }
 
     public ExperimentForm SetController(ExperimentController controller)
@@ -26,7 +28,7 @@ namespace PetriPlanet
     public void Start()
     {
       var experiment = this.controller.Experiment;
-      this.Controls.Add(new WorldCanvas(experiment.Width, experiment.Height));      
+      this.Controls.Add(new WorldCanvas(experiment.Width, experiment.Height));
     }
   }
 }
