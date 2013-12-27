@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 using PetriPlanet.Core.Experiments;
 
 namespace PetriPlanet
@@ -15,20 +16,21 @@ namespace PetriPlanet
     private void Initialize()
     {
       this.Text = "Petri Planet";
+      this.BackColor = Color.DarkGray;
+
       this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
       this.AutoSize = true;
     }
 
-    public ExperimentForm SetController(ExperimentController controller)
+    public ExperimentForm SetController(ExperimentController experimentController)
     {
-      this.controller = controller;
+      this.controller = experimentController;
       return this;
     }
 
     public void Start()
     {
-      var experiment = this.controller.Experiment;
-      this.Controls.Add(new WorldCanvas(experiment.Width, experiment.Height));
+      this.Controls.Add(new WorldView(this.controller));
     }
   }
 }
