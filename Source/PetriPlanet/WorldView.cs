@@ -26,8 +26,26 @@ namespace PetriPlanet
     {
       base.OnPaint(e);
 
-      var brush = new SolidBrush(Color.LightGray);
-      e.Graphics.FillRectangle(brush, worldGridScale / 2, worldGridScale / 2, experimentController.Experiment.Width * worldGridScale, experimentController.Experiment.Height * worldGridScale);
+      var offset = worldGridScale / 2;
+
+      var worldGridElements = experimentController.GetWorldGridElements();
+      var width = worldGridElements.GetLength(0);
+      var height = worldGridElements.GetLength(1);
+
+      for (var i = 0; i < width; i++) {
+        for (var j = 0; j < height; j++) {
+          var left = offset + i * worldGridScale;
+          var top = offset + j * worldGridScale;
+
+          var brush = GetBrush(worldGridElements[i, j]);
+          e.Graphics.FillRectangle(brush, left, top, worldGridScale, worldGridScale);
+        }
+      }
+    }
+
+    private Brush GetBrush(WorldGridElement worldGridElement)
+    {
+      return new SolidBrush(worldGridElement.GetColor());
     }
   }
 }

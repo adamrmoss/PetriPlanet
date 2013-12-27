@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace PetriPlanet.Core.Experiments
 {
@@ -10,12 +11,34 @@ namespace PetriPlanet.Core.Experiments
     Food = 3,
   }
 
+  public static class WorldGridElementTypeExtensions
+  {
+    public static Color GetColor(this WorldGridElementType worldGridElementType)
+    {
+      switch (worldGridElementType) {
+        case WorldGridElementType.Empty:
+          return Color.LightGray;
+        case WorldGridElementType.Organism:
+          return Color.DarkGreen;
+        case WorldGridElementType.Poison:
+          return Color.Firebrick;
+        default:
+          throw new ArgumentException(string.Format("Cannot handle worldGridElementType: {0}", worldGridElementType));
+      }
+    }
+  }
+
   public class WorldGridElement
   {
     private const float fullEnergyLevel = 100f;
 
     public WorldGridElementType Type { get; private set; }
     public float Intensity { get; private set; }
+
+    public Color GetColor()
+    {
+      return this.Type.GetColor().ApplyIntensity(this.Intensity);
+    }
 
     public static WorldGridElement Build(object obj)
     {
