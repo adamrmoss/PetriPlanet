@@ -18,6 +18,17 @@ namespace PetriPlanet
       this.Text = "Petri Planet";
       this.BackColor = Color.DarkGray;
 
+      var trackBar = new TrackBar {
+        Orientation = Orientation.Horizontal,
+        Minimum = 1,
+        Maximum = 10,
+        TickFrequency = 1, 
+        TickStyle = TickStyle.BottomRight,
+        SmallChange = 1,
+        LargeChange = 10,
+      };
+      this.Controls.Add(trackBar);
+
       this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
       this.AutoSize = true;
     }
@@ -30,7 +41,9 @@ namespace PetriPlanet
 
     public void Start()
     {
-      this.Controls.Add(new WorldView(this.controller));
+      var worldView = new WorldView(this.controller);
+      this.Controls.Add(worldView);
+
       this.controller.Start();
     }
   }

@@ -1,9 +1,10 @@
-﻿namespace PetriPlanet.Core.Experiments
+﻿using System;
+
+namespace PetriPlanet.Core.Experiments
 {
   public class ExperimentController
   {
     public Experiment Experiment { get; private set; }
-
     public WorldGridElement[,] GetWorldGridElements()
     {
       var width = this.Experiment.WorldGrid.GetLength(0);
@@ -15,6 +16,13 @@
           elements[i, j] = WorldGridElement.Build(this.Experiment.WorldGrid[i, j]);
 
       return elements;
+    }
+
+    public event Action WorldGridUpdated;
+    private void PublishWorldGridUpdated()
+    {
+      if (this.WorldGridUpdated != null)
+        this.WorldGridUpdated();
     }
 
     private ExperimentController()

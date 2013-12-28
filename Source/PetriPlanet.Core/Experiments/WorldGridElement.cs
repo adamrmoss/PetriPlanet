@@ -22,6 +22,8 @@ namespace PetriPlanet.Core.Experiments
           return Color.Green;
         case WorldGridElementType.Poison:
           return Color.Firebrick;
+        case WorldGridElementType.Food:
+          return Color.CornflowerBlue;
         default:
           throw new ArgumentException(string.Format("Cannot handle worldGridElementType: {0}", worldGridElementType));
       }
@@ -55,7 +57,7 @@ namespace PetriPlanet.Core.Experiments
 
     private static WorldGridElement BuildEmpty()
     {
-      return new WorldGridElement { Type = WorldGridElementType.Empty };
+      return new WorldGridElement { Type = WorldGridElementType.Empty, Intensity = 1f };
     }
 
     private static WorldGridElement BuildOrganism(float intensity)
