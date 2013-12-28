@@ -27,5 +27,16 @@
         Experiment = experiment,
       };
     }
+
+    public void Start()
+    {
+      var x = 5;
+      var y = 10;
+      var organism = new Organism {
+        Energy = 248f,
+      };
+
+      this.Experiment.PlaceOrganism(organism, x, y);
+    }
   }
 }

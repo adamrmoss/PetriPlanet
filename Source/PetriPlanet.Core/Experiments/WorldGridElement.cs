@@ -19,7 +19,7 @@ namespace PetriPlanet.Core.Experiments
         case WorldGridElementType.Empty:
           return Color.LightGray;
         case WorldGridElementType.Organism:
-          return Color.DarkGreen;
+          return Color.LightGreen;
         case WorldGridElementType.Poison:
           return Color.Firebrick;
         default:
@@ -30,7 +30,7 @@ namespace PetriPlanet.Core.Experiments
 
   public class WorldGridElement
   {
-    private const float fullEnergyLevel = 100f;
+    private const float fullEnergyLevel = 256f;
 
     public WorldGridElementType Type { get; private set; }
     public float Intensity { get; private set; }

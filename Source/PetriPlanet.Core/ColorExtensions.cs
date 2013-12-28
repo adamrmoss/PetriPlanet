@@ -10,11 +10,12 @@ namespace PetriPlanet.Core
       if (intensity < 0 || intensity > 1)
         throw new InvalidOperationException("Intensity must be in [0, 1]");
 
+      var alpha = fullColor.A;
       var redness = fullColor.R * intensity;
       var blueness = fullColor.B * intensity;
       var greenness = fullColor.G * intensity;
 
-      return Color.FromArgb((int) redness, (int) blueness, (int) greenness);
+      return Color.FromArgb(alpha, (int) redness, (int) blueness, (int) greenness);
     }
   }
 }

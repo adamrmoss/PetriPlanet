@@ -12,6 +12,7 @@ namespace PetriPlanet.Core.Experiments
 
     private Experiment()
     {
+      this.Organisms = new HashSet<Organism>();
     }
 
     public static Experiment Build(int width, int height)

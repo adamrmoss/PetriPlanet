@@ -31,6 +31,7 @@ namespace PetriPlanet
     public void Start()
     {
       this.Controls.Add(new WorldView(this.controller));
+      this.controller.Start();
     }
   }
 }
