@@ -19,7 +19,7 @@ namespace PetriPlanet.Core.Experiments
         case WorldGridElementType.Empty:
           return Color.LightGray;
         case WorldGridElementType.Organism:
-          return Color.LightGreen;
+          return Color.Green;
         case WorldGridElementType.Poison:
           return Color.Firebrick;
         default:

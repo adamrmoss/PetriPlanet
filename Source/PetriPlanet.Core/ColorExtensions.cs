@@ -15,7 +15,7 @@ namespace PetriPlanet.Core
       var blueness = fullColor.B * intensity;
       var greenness = fullColor.G * intensity;
 
-      return Color.FromArgb(alpha, (int) redness, (int) blueness, (int) greenness);
+      return Color.FromArgb(alpha, (int) redness, (int) greenness, (int) blueness);
     }
   }
 }
