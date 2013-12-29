@@ -7,6 +7,7 @@ namespace PetriPlanet
   public class ExperimentForm : Form
   {
     private ExperimentController controller;
+    private FlowLayoutPanel verticalLayout;
 
     public ExperimentForm()
     {
@@ -18,16 +19,23 @@ namespace PetriPlanet
       this.Text = "Petri Planet";
       this.BackColor = Color.DarkGray;
 
+      this.verticalLayout = new FlowLayoutPanel {
+        FlowDirection = FlowDirection.TopDown,
+        AutoSizeMode = AutoSizeMode.GrowAndShrink,
+        AutoSize = true,
+      };
+      this.Controls.Add(this.verticalLayout);
+
       var trackBar = new TrackBar {
         Orientation = Orientation.Horizontal,
         Minimum = 1,
         Maximum = 10,
-        TickFrequency = 1, 
+        TickFrequency = 1,
         TickStyle = TickStyle.BottomRight,
         SmallChange = 1,
         LargeChange = 10,
       };
-      this.Controls.Add(trackBar);
+      this.verticalLayout.Controls.Add(trackBar);
 
       this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
       this.AutoSize = true;
@@ -42,7 +50,8 @@ namespace PetriPlanet
     public void Start()
     {
       var worldView = new WorldView(this.controller);
-      this.Controls.Add(worldView);
+
+      this.verticalLayout.Controls.Add(worldView);
 
       this.controller.Start();
     }
