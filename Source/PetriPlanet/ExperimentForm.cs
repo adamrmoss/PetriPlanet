@@ -7,7 +7,9 @@ namespace PetriPlanet
   public class ExperimentForm : Form
   {
     private ExperimentController controller;
+
     private FlowLayoutPanel verticalLayout;
+    private TrackBar trackBar;
 
     public ExperimentForm()
     {
@@ -26,7 +28,7 @@ namespace PetriPlanet
       };
       this.Controls.Add(this.verticalLayout);
 
-      var trackBar = new TrackBar {
+      this.trackBar = new TrackBar {
         Orientation = Orientation.Horizontal,
         Minimum = 1,
         Maximum = 10,
@@ -35,7 +37,7 @@ namespace PetriPlanet
         SmallChange = 1,
         LargeChange = 10,
       };
-      this.verticalLayout.Controls.Add(trackBar);
+      this.verticalLayout.Controls.Add(this.trackBar);
 
       this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
       this.AutoSize = true;

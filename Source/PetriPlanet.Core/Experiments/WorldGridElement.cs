@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using PetriPlanet.Core.Organisms;
 
 namespace PetriPlanet.Core.Experiments
 {
