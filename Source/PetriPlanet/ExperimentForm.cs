@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using PetriPlanet.Core.Experiments;
-using Quartz;
 
 namespace PetriPlanet
 {
