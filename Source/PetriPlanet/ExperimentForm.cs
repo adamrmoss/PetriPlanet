@@ -1,6 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using PetriPlanet.Core.Experiments;
+using Quartz;
 
 namespace PetriPlanet
 {
@@ -10,6 +12,7 @@ namespace PetriPlanet
 
     private FlowLayoutPanel verticalLayout;
     private TrackBar trackBar;
+    private Label clockLabel;
 
     public ExperimentForm()
     {
@@ -21,12 +24,28 @@ namespace PetriPlanet
       this.Text = "Petri Planet";
       this.BackColor = Color.DarkGray;
 
+      this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+      this.AutoSize = true;
+
       this.verticalLayout = new FlowLayoutPanel {
         FlowDirection = FlowDirection.TopDown,
         AutoSizeMode = AutoSizeMode.GrowAndShrink,
         AutoSize = true,
       };
       this.Controls.Add(this.verticalLayout);
+
+      var headerLayout = new FlowLayoutPanel {
+        FlowDirection = FlowDirection.LeftToRight,
+        AutoSizeMode = AutoSizeMode.GrowAndShrink,
+        AutoSize = true,
+      };
+      this.verticalLayout.Controls.Add(headerLayout);
+
+      var initialTime = this.controller == null ? "-" : this.controller.Experiment.CurrentTime.ToString();
+      this.clockLabel = new Label {
+        Text = initialTime,
+      };
+      headerLayout.Controls.Add(this.clockLabel);
 
       this.trackBar = new TrackBar {
         Orientation = Orientation.Horizontal,
@@ -37,10 +56,7 @@ namespace PetriPlanet
         SmallChange = 1,
         LargeChange = 10,
       };
-      this.verticalLayout.Controls.Add(this.trackBar);
-
-      this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-      this.AutoSize = true;
+      headerLayout.Controls.Add(this.trackBar);
     }
 
     public ExperimentForm SetController(ExperimentController experimentController)

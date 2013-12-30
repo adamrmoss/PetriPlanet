@@ -12,9 +12,9 @@ namespace PetriPlanet.Core.Organisms
     public Instruction[] Instructions { get; private set; }
 
     public Direction FacingDirection { get; private set; }
-    public short BX { get; private set; }
-    public short CX { get; private set; }
-    public short IP { get; private set; }
+    public ushort Bx { get; private set; }
+    public ushort Cx { get; private set; }
+    public ushort Ip { get; private set; }
 
     public Computer()
     {

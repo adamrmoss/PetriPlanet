@@ -10,10 +10,19 @@ namespace PetriPlanet.Core.Experiments
     public int Height { get; private set; }
     public object[,] WorldGrid { get; private set; }
     public HashSet<Organism> Organisms { get; private set; }
+    
+    public DateTime CurrentTime { get; private set; }
+    public int TimeScale { get; private set; }
+
+    private DateTime lastCheckedTime;
 
     private Experiment()
     {
       this.Organisms = new HashSet<Organism>();
+
+      this.CurrentTime = new DateTime();
+      this.TimeScale = 1;
+      this.lastCheckedTime = DateTime.Now;
     }
 
     public static Experiment Build(int width, int height)
@@ -36,6 +45,16 @@ namespace PetriPlanet.Core.Experiments
 
       this.WorldGrid[x, y] = organism;
       this.Organisms.Add(organism);
+    }
+
+    public void UpdateCurrentTime()
+    {
+      var rawTimeSpan = DateTime.Now - this.lastCheckedTime;
+      var scaledTicks = this.TimeScale * rawTimeSpan.Ticks;
+      var scaledTimeSpan = new TimeSpan(scaledTicks);
+
+      this.CurrentTime += scaledTimeSpan;
+      this.lastCheckedTime = DateTime.Now;
     }
   }
 }
