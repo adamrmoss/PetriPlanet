@@ -43,6 +43,7 @@
     <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="ColorExtensions.cs" />
     <Compile Include="Direction.cs" />
+    <Compile Include="Organisms\Biomass.cs" />
     <Compile Include="Organisms\Instruction.cs" />
     <Compile Include="Organisms\Organism.cs" />
     <Compile Include="Experiments\WorldGridElement.cs" />

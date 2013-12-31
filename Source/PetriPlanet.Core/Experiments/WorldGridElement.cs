@@ -18,7 +18,7 @@ namespace PetriPlanet.Core.Experiments
     {
       switch (worldGridElementType) {
         case WorldGridElementType.Empty:
-          return Color.LightGray;
+          return Color.DarkGray;
         case WorldGridElementType.Organism:
           return Color.Green;
         case WorldGridElementType.Poison:
@@ -37,33 +37,106 @@ namespace PetriPlanet.Core.Experiments
 
     public WorldGridElementType Type { get; private set; }
     public float Intensity { get; private set; }
+    public Direction Direction { get; private set; }
 
     public Color GetColor()
     {
       return this.Type.GetColor().ApplyIntensity(this.Intensity);
     }
 
+    public void Draw(Graphics graphics, int left, int top)
+    {
+      var brush = new SolidBrush(this.GetColor());
+
+      switch (this.Type) {
+        case WorldGridElementType.Empty:
+        case WorldGridElementType.Food:
+        case WorldGridElementType.Poison:
+          graphics.FillRectangle(brush, left, top, WorldGridScale, WorldGridScale);
+          break;
+        case WorldGridElementType.Organism:
+          var trianglePoints = GetTrianglePoints(Direction, left, top);
+          graphics.FillPolygon(brush, trianglePoints);
+          break;
+      }
+    }
+
+    private static Point[] GetTrianglePoints(Direction direction, int left, int top)
+    {
+      switch (direction) {
+        case Direction.East:
+          return new[] {
+            new Point(left + WorldGridScale / 2, top),
+            new Point(left + WorldGridScale, top + WorldGridScale / 2),
+            new Point(left + WorldGridScale / 2, top + WorldGridScale),
+          };
+        case Direction.North:
+          return new[] {
+            new Point(left, top + WorldGridScale / 2),
+            new Point(left + WorldGridScale / 2, top),
+            new Point(left + WorldGridScale, top + WorldGridScale / 2),
+          };
+        case Direction.West:
+          return new[] {
+            new Point(left + WorldGridScale / 2, top),
+            new Point(left, top + WorldGridScale / 2),
+            new Point(left + WorldGridScale / 2, top + WorldGridScale),
+          };
+        case Direction.South:
+          return new[] {
+            new Point(left, top + WorldGridScale / 2),
+            new Point(left + WorldGridScale / 2, top + WorldGridScale),
+            new Point(left + WorldGridScale, top + WorldGridScale / 2),
+          };
+        default:
+          throw new ArgumentException("Direction cannot be null: " + direction);
+      }
+    }
+
     public static WorldGridElement Build(object obj)
     {
       var organism = obj as Organism;
+      var biomass = obj as Biomass;
 
       if (obj == null) {
         return BuildEmpty();
       } else if (organism != null) {
         var intensity = organism.Energy / fullEnergyLevel;
-        return BuildOrganism(intensity);
+        return BuildOrganism(intensity, organism.Direction);
+      } else if (biomass != null) {
+        var intensity = biomass.Value / fullEnergyLevel;
+        return BuildBiomass((ushort) intensity);
       } else
-        throw new InvalidOperationException(string.Format("Unknown Object: {0}, cannot Build WorldGridElement", obj));
+        throw new InvalidOperationException(String.Format("Unknown Object: {0}, cannot Build WorldGridElement", obj));
     }
 
     private static WorldGridElement BuildEmpty()
     {
-      return new WorldGridElement { Type = WorldGridElementType.Empty, Intensity = 1f };
+      return new WorldGridElement {
+        Type = WorldGridElementType.Empty, 
+        Intensity = 1f,
+      };
     }
 
-    private static WorldGridElement BuildOrganism(float intensity)
+    private static WorldGridElement BuildOrganism(float intensity, Direction direction)
     {
-      return new WorldGridElement { Type = WorldGridElementType.Organism, Intensity = intensity };
+      return new WorldGridElement {
+        Type = WorldGridElementType.Organism, 
+        Intensity = intensity, 
+        Direction = direction,
+      };
     }
+
+    private static WorldGridElement BuildBiomass(ushort value)
+    {
+      var type = Primes.LookupTable[value] ? WorldGridElementType.Food : WorldGridElementType.Poison;
+
+      return new WorldGridElement {
+        Type = type,
+        Intensity = value,
+      };
+    }
+
+    public const int WorldGridScale = 16;
   }
 }

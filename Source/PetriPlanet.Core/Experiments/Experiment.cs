@@ -47,6 +47,11 @@ namespace PetriPlanet.Core.Experiments
       this.Organisms.Add(organism);
     }
 
+    public void PlaceBiomass(Biomass biomass, int x, int y)
+    {
+      this.WorldGrid[x, y] = biomass;
+    }
+
     public void UpdateCurrentTime()
     {
       var rawTimeSpan = DateTime.Now - this.lastCheckedTime;

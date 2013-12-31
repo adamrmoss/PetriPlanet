@@ -6,8 +6,7 @@ namespace PetriPlanet
 {
   public class WorldView : Control
   {
-    private const int worldGridScale = 16;
-    private ExperimentController experimentController;
+    private readonly ExperimentController experimentController;
 
     public WorldView(ExperimentController experimentController)
     {
@@ -17,8 +16,8 @@ namespace PetriPlanet
 
     private void Initialize()
     {
-      this.Width = (experimentController.Experiment.Width + 1) * worldGridScale;
-      this.Height = (experimentController.Experiment.Height + 1) * worldGridScale;
+      this.Width = (experimentController.Experiment.Width + 1) * WorldGridElement.WorldGridScale;
+      this.Height = (experimentController.Experiment.Height + 1) * WorldGridElement.WorldGridScale;
       this.BackColor = Color.DarkGray;
     }
 
@@ -26,7 +25,7 @@ namespace PetriPlanet
     {
       base.OnPaint(e);
 
-      var offset = worldGridScale / 2;
+      var offset = WorldGridElement.WorldGridScale / 2;
 
       var worldGridElements = experimentController.GetWorldGridElements();
       var width = worldGridElements.GetLength(0);
@@ -34,18 +33,13 @@ namespace PetriPlanet
 
       for (var i = 0; i < width; i++) {
         for (var j = 0; j < height; j++) {
-          var left = offset + i * worldGridScale;
-          var top = offset + j * worldGridScale;
+          var left = offset + i * WorldGridElement.WorldGridScale;
+          var top = offset + j * WorldGridElement.WorldGridScale;
 
-          var brush = GetBrush(worldGridElements[i, j]);
-          e.Graphics.FillRectangle(brush, left, top, worldGridScale, worldGridScale);
+          var worldGridElement = worldGridElements[i, j];
+          worldGridElement.Draw(e.Graphics, left, top);
         }
       }
-    }
-
-    private Brush GetBrush(WorldGridElement worldGridElement)
-    {
-      return new SolidBrush(worldGridElement.GetColor());
     }
   }
 }

@@ -39,13 +39,13 @@ namespace PetriPlanet.Core.Experiments
 
     public void Start()
     {
-      var x = 5;
-      var y = 10;
       var organism = new Organism {
         Energy = 248f,
+        Direction = Direction.South,
       };
 
-      this.Experiment.PlaceOrganism(organism, x, y);
+      this.Experiment.PlaceOrganism(organism, 10, 8);
+
     }
   }
 }

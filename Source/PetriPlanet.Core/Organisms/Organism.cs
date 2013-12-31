@@ -2,8 +2,10 @@
 {
   public class Organism
   {
-    public float Energy { get; set; }
     public Computer Computer { get; private set; }
+
+    public float Energy { get; set; }
+    public Direction Direction { get; set; }
 
     public Organism()
     {
