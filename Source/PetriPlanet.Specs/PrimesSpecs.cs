@@ -15,7 +15,19 @@ namespace PetriPlanet.Specs
     [Test]
     public void Array_size_should_be_65536()
     {
-      Expect(Primes.ArraySize, EqualTo(65536));
+      Expect(Primes.LookupTableSize, EqualTo(65536));
+    }
+
+    [Test]
+    public void First_few_primes()
+    {
+      Expect(Primes.LookupTable[0], False);
+      Expect(Primes.LookupTable[1], False);
+      Expect(Primes.LookupTable[2], True);
+      Expect(Primes.LookupTable[3], True);
+      Expect(Primes.LookupTable[4], False);
+      Expect(Primes.LookupTable[5], True);
+      Expect(Primes.LookupTable[6], False);
     }
   }
 }
