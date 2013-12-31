@@ -104,8 +104,7 @@ namespace PetriPlanet.Core.Experiments
         var intensity = organism.Energy / fullEnergyLevel;
         return BuildOrganism(intensity, organism.Direction);
       } else if (biomass != null) {
-        var intensity = biomass.Value / fullEnergyLevel;
-        return BuildBiomass((ushort) intensity);
+        return BuildBiomass(biomass.Value);
       } else
         throw new InvalidOperationException(String.Format("Unknown Object: {0}, cannot Build WorldGridElement", obj));
     }
@@ -133,7 +132,7 @@ namespace PetriPlanet.Core.Experiments
 
       return new WorldGridElement {
         Type = type,
-        Intensity = value,
+        Intensity = 1f,
       };
     }
 

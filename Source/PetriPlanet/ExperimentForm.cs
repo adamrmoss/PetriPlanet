@@ -12,6 +12,7 @@ namespace PetriPlanet
     private FlowLayoutPanel verticalLayout;
     private TrackBar trackBar;
     private Label clockLabel;
+    private Timer timer;
 
     public ExperimentForm()
     {
@@ -56,6 +57,12 @@ namespace PetriPlanet
         LargeChange = 10,
       };
       headerLayout.Controls.Add(this.trackBar);
+
+      this.timer = new Timer {
+        Enabled = false,
+        Interval = 500,
+      };
+      this.timer.Tick += this.OnTick;
     }
 
     public ExperimentForm SetController(ExperimentController experimentController)
@@ -71,6 +78,11 @@ namespace PetriPlanet
       this.verticalLayout.Controls.Add(worldView);
 
       this.controller.Start();
+    }
+
+    private void OnTick(object sender, EventArgs eventArgs)
+    {
+      
     }
   }
 }

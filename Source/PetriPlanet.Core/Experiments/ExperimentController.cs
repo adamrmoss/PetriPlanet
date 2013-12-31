@@ -46,6 +46,20 @@ namespace PetriPlanet.Core.Experiments
 
       this.Experiment.PlaceOrganism(organism, 10, 8);
 
+      var biomass1 = new Biomass {
+        Value = 64000,
+      };
+      this.Experiment.PlaceBiomass(biomass1, 11, 8);
+
+      var biomass2 = new Biomass {
+        Value = 65521,
+      };
+      this.Experiment.PlaceBiomass(biomass2, 9, 8);
+
+      var biomass3 = new Biomass {
+        Value = 29,
+      };
+      this.Experiment.PlaceBiomass(biomass3, 9, 9);
     }
   }
 }
