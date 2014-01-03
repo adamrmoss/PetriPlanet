@@ -9,7 +9,7 @@ namespace PetriPlanet
   {
     private const string dreamtimeFormatString = "yyyy-MM-dd HH:mm:ss";
 
-    private readonly ExperimentController controller;
+    private readonly Experiment experiment;
 
     private FlowLayoutPanel verticalLayout;
     private TrackBar trackBar;
@@ -19,9 +19,9 @@ namespace PetriPlanet
     private Timer simulationTimer;
     private Timer uiTimer;
 
-    public ExperimentForm(ExperimentController controller)
+    public ExperimentForm(Experiment experiment)
     {
-      this.controller = controller;
+      this.experiment = experiment;
       this.Initialize();
     }
 
@@ -47,10 +47,10 @@ namespace PetriPlanet
       };
       this.verticalLayout.Controls.Add(headerLayout);
 
-      this.worldView = new WorldView(this.controller);
+      this.worldView = new WorldView(this.experiment);
       this.verticalLayout.Controls.Add(this.worldView);
 
-      var initialTime = this.controller.Experiment.CurrentTime.ToString(dreamtimeFormatString);
+      var initialTime = this.experiment.CurrentTime.ToString(dreamtimeFormatString);
       this.clockLabel = new Label {
         Text = initialTime,
         AutoSize = true,
@@ -87,8 +87,8 @@ namespace PetriPlanet
 
     private void OnSimulationTick(object sender, EventArgs eventArgs)
     {
-      this.controller.Tick();
-      this.clockLabel.Text = this.controller.Experiment.CurrentTime.ToString(dreamtimeFormatString);
+      this.experiment.Tick();
+      this.clockLabel.Text = this.experiment.CurrentTime.ToString(dreamtimeFormatString);
       this.simulationTimer.Interval = 1000 / this.trackBar.Value;
     }
 

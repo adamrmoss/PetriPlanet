@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
 using PetriPlanet.Core.Organisms;
 
 namespace PetriPlanet.Core.Experiments
@@ -14,23 +16,57 @@ namespace PetriPlanet.Core.Experiments
     public HashSet<Organism> Organisms { get; private set; }
     public DateTime CurrentTime { get; private set; }
 
-    private Experiment()
+    public WorldGridElement[,] GetWorldGridElements()
     {
+      var width = this.WorldGrid.GetLength(0);
+      var height = this.WorldGrid.GetLength(1);
+      var elements = new WorldGridElement[width, height];
+
+      for (var i = 0; i < width; i++)
+        for (var j = 0; j < height; j++)
+          elements[i, j] = WorldGridElement.Build(this.WorldGrid[i, j]);
+
+      return elements;
+    }
+
+    public event Action ExperimentUpdated;
+    private void PublishExperimentUpdated()
+    {
+      if (this.ExperimentUpdated != null)
+        this.ExperimentUpdated();
+    }
+
+    public Experiment(int width, int height)
+    {
+      this.Width = width;
+      this.Height = height;
+
       this.Organisms = new HashSet<Organism>();
-
       this.CurrentTime = new DateTime(1, 1, 1, 0, 0, 0);
+      this.WorldGrid = new object[width,height];
     }
 
-    public static Experiment Build(int width, int height)
+    public void Start()
     {
-      return new Experiment {
-        Width = width,
-        Height = height,
-        WorldGrid = new object[width, height],
-      };
+      var json = File.ReadAllText(@"ExperimentSetup.json");
+      var experimentSetup = JsonConvert.DeserializeObject<ExperimentSetupElement[]>(json);
+      foreach (var experimentSetupElement in experimentSetup) {
+        switch (experimentSetupElement.Type) {
+          case ExperimentSetupElementType.Organism:
+            var organism = new Organism(experimentSetupElement.Energy, experimentSetupElement.Direction, experimentSetupElement.Instructions);
+            this.SetupOrganism(organism, experimentSetupElement.X, experimentSetupElement.Y);
+            break;
+          case ExperimentSetupElementType.Biomass:
+            var biomass = new Biomass {
+              Value = experimentSetupElement.Value,
+            };
+            this.SetupBiomass(biomass, experimentSetupElement.X, experimentSetupElement.Y);
+            break;
+        }
+      }
     }
 
-    public void PlaceOrganism(Organism organism, int x, int y)
+    public void SetupOrganism(Organism organism, int x, int y)
     {
       if (this.Organisms.Contains(organism))
         throw new InvalidOperationException(string.Format("Organism already placed: {0}", organism));
@@ -43,7 +79,7 @@ namespace PetriPlanet.Core.Experiments
       this.Organisms.Add(organism);
     }
 
-    public void PlaceBiomass(Biomass biomass, int x, int y)
+    public void SetupBiomass(Biomass biomass, int x, int y)
     {
       this.WorldGrid[x, y] = biomass;
     }
@@ -51,6 +87,7 @@ namespace PetriPlanet.Core.Experiments
     public void Tick()
     {
       this.CurrentTime += tickIncrement;
+      this.PublishExperimentUpdated();
     }
   }
 }

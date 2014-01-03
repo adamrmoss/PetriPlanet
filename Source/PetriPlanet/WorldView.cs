@@ -6,18 +6,18 @@ namespace PetriPlanet
 {
   public class WorldView : Control
   {
-    private readonly ExperimentController experimentController;
+    private readonly Experiment experiment;
 
-    public WorldView(ExperimentController experimentController)
+    public WorldView(Experiment experiment)
     {
-      this.experimentController = experimentController;
+      this.experiment = experiment;
       this.Initialize();
     }
 
     private void Initialize()
     {
-      this.Width = (experimentController.Experiment.Width + 1) * WorldGridElement.WorldGridScale;
-      this.Height = (experimentController.Experiment.Height + 1) * WorldGridElement.WorldGridScale;
+      this.Width = (this.experiment.Width + 1) * WorldGridElement.WorldGridScale;
+      this.Height = (this.experiment.Height + 1) * WorldGridElement.WorldGridScale;
       this.BackColor = Color.DarkGray;
     }
 
@@ -27,7 +27,7 @@ namespace PetriPlanet
 
       const int offset = WorldGridElement.WorldGridScale / 2;
 
-      var worldGridElements = experimentController.GetWorldGridElements();
+      var worldGridElements = this.experiment.GetWorldGridElements();
       var width = worldGridElements.GetLength(0);
       var height = worldGridElements.GetLength(1);
 

@@ -15,14 +15,13 @@ namespace PetriPlanet
     {
       var lookupTable = Primes.LookupTable;
 
-      var simulation = Experiment.Build(width, height);
-      var simulationController = ExperimentController.Build(simulation);
-      simulationController.Start();
+      var simulation = new Experiment(width, height);
+      simulation.Start();
 
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
-      var experimentForm = new ExperimentForm(simulationController);
+      var experimentForm = new ExperimentForm(simulation);
       Application.Run(experimentForm);
     }
   }
