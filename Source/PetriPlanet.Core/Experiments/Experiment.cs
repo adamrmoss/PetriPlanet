@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
 using PetriPlanet.Core.Organisms;
 
 namespace PetriPlanet.Core.Experiments
@@ -36,21 +34,16 @@ namespace PetriPlanet.Core.Experiments
         this.ExperimentUpdated();
     }
 
-    public Experiment(int width, int height)
+    public Experiment(ExperimentSetup setup)
     {
-      this.Width = width;
-      this.Height = height;
+      this.Width = setup.Width;
+      this.Height = setup.Height;
 
       this.Organisms = new HashSet<Organism>();
       this.CurrentTime = new DateTime(1, 1, 1, 0, 0, 0);
-      this.WorldGrid = new object[width,height];
-    }
+      this.WorldGrid = new object[this.Width, this.Height];
 
-    public void Start()
-    {
-      var json = File.ReadAllText(@"ExperimentSetup.json");
-      var experimentSetup = JsonConvert.DeserializeObject<ExperimentSetupElement[]>(json);
-      foreach (var experimentSetupElement in experimentSetup) {
+      foreach (var experimentSetupElement in setup.Elements) {
         switch (experimentSetupElement.Type) {
           case ExperimentSetupElementType.Organism:
             var organism = new Organism(experimentSetupElement.Energy, experimentSetupElement.Direction, experimentSetupElement.Instructions);

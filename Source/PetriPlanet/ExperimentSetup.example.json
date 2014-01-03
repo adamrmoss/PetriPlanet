@@ -1,32 +1,36 @@
-﻿[
-  {
-    "Type": "Organism",
-    "Energy": "248",
-    "X": 10,
-    "Y": 8,
-    "Direction": "South",
-    "Instructions": []
-  }, {
-    "Type": "Organism",
-    "Energy": "28",
-    "X": 15,
-    "Y": 7,
-    "Direction": "West",
-    "Instructions": []
-  }, {
-    "Type": "Biomass",
-    "Value": 64000,
-    "X": 11,
-    "Y": 8
-  }, {
-    "Type": "Biomass",
-    "Value": 65521,
-    "X": 9,
-    "Y": 8
-  }, {
-    "Type": "Biomass",
-    "Value": 29,
-    "X": 9,
-    "Y": 9
-  }
-]
+﻿{
+  "Width": 64,
+  "Height": 48,
+  "Elements": [
+    {
+      "Type": "Organism",
+      "Energy": "248",
+      "X": 10,
+      "Y": 8,
+      "Direction": "South",
+      "Instructions": []
+    }, {
+      "Type": "Organism",
+      "Energy": "28",
+      "X": 15,
+      "Y": 7,
+      "Direction": "West",
+      "Instructions": []
+    }, {
+      "Type": "Biomass",
+      "Value": 64000,
+      "X": 11,
+      "Y": 8
+    }, {
+      "Type": "Biomass",
+      "Value": 65521,
+      "X": 9,
+      "Y": 8
+    }, {
+      "Type": "Biomass",
+      "Value": 29,
+      "X": 9,
+      "Y": 9
+    }
+  ]
+}

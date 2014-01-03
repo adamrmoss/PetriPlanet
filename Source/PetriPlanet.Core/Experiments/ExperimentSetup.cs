@@ -7,6 +7,13 @@ using PetriPlanet.Core.Organisms;
 
 namespace PetriPlanet.Core.Experiments
 {
+  public class ExperimentSetup
+  {
+    public int Width { get; set; }
+    public int Height { get; set; }
+    public ExperimentSetupElement[] Elements { get; set; }
+  }
+
   public enum ExperimentSetupElementType
   {
     Organism,
