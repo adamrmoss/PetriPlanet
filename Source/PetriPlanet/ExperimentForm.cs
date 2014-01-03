@@ -7,16 +7,21 @@ namespace PetriPlanet
 {
   public class ExperimentForm : Form
   {
-    private ExperimentController controller;
+    private const string dreamtimeFormatString = "yyyy-MM-dd HH:mm:ss";
+
+    private readonly ExperimentController controller;
 
     private FlowLayoutPanel verticalLayout;
     private TrackBar trackBar;
     private Label clockLabel;
-    private Timer timer;
     private WorldView worldView;
 
-    public ExperimentForm()
+    private Timer simulationTimer;
+    private Timer uiTimer;
+
+    public ExperimentForm(ExperimentController controller)
     {
+      this.controller = controller;
       this.Initialize();
     }
 
@@ -42,47 +47,53 @@ namespace PetriPlanet
       };
       this.verticalLayout.Controls.Add(headerLayout);
 
-      var initialTime = this.controller == null ? "-" : this.controller.Experiment.CurrentTime.ToString();
+      this.worldView = new WorldView(this.controller);
+      this.verticalLayout.Controls.Add(this.worldView);
+
+      var initialTime = this.controller.Experiment.CurrentTime.ToString(dreamtimeFormatString);
       this.clockLabel = new Label {
         Text = initialTime,
+        AutoSize = true,
+        // Hackish
+        Width = 150,
       };
       headerLayout.Controls.Add(this.clockLabel);
 
       this.trackBar = new TrackBar {
         Orientation = Orientation.Horizontal,
         Minimum = 1,
-        Maximum = 10,
+        Maximum = 100,
         TickFrequency = 1,
         TickStyle = TickStyle.BottomRight,
         SmallChange = 1,
         LargeChange = 10,
+        AutoSize = true,
+        Width = this.worldView.Width - this.clockLabel.Width
       };
       headerLayout.Controls.Add(this.trackBar);
 
-      this.timer = new Timer {
+      this.simulationTimer = new Timer {
         Enabled = true,
         Interval = 1000,
       };
-      this.timer.Tick += this.OnTick;
+      this.simulationTimer.Tick += this.OnSimulationTick;
+
+      this.uiTimer = new Timer {
+        Enabled = true,
+        Interval = 100,
+      };
+      this.uiTimer.Tick += this.OnUiTick;
     }
 
-    public ExperimentForm SetController(ExperimentController experimentController)
-    {
-      this.controller = experimentController;
-      return this;
-    }
-
-    public void Start()
-    {
-      this.worldView = new WorldView(this.controller);
-      this.verticalLayout.Controls.Add(this.worldView);
-      this.controller.Start();
-    }
-
-    private void OnTick(object sender, EventArgs eventArgs)
+    private void OnSimulationTick(object sender, EventArgs eventArgs)
     {
       this.controller.Tick();
-      this.clockLabel.Text = this.controller == null ? "-" : this.controller.Experiment.CurrentTime.ToString();
+      this.clockLabel.Text = this.controller.Experiment.CurrentTime.ToString(dreamtimeFormatString);
+      this.simulationTimer.Interval = 1000 / this.trackBar.Value;
+    }
+
+    private void OnUiTick(object sender, EventArgs eventArgs)
+    {
       this.Refresh();
     }
   }

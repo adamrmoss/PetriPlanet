@@ -17,12 +17,12 @@ namespace PetriPlanet
 
       var simulation = Experiment.Build(width, height);
       var simulationController = ExperimentController.Build(simulation);
+      simulationController.Start();
 
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
-      var experimentForm = new ExperimentForm().SetController(simulationController);
-      experimentForm.Start();
+      var experimentForm = new ExperimentForm(simulationController);
       Application.Run(experimentForm);
     }
   }
