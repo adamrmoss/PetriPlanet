@@ -47,11 +47,7 @@ namespace PetriPlanet.Core.Experiments
       foreach (var experimentSetupElement in experimentSetup) {
         switch (experimentSetupElement.Type) {
           case ExperimentSetupElementType.Organism:
-            var computer = new Computer(experimentSetupElement.Direction, experimentSetupElement.Instructions);
-
-            var organism = new Organism(computer) {
-              Energy = experimentSetupElement.Energy,
-            };
+            var organism = new Organism(experimentSetupElement.Energy, experimentSetupElement.Direction, experimentSetupElement.Instructions);
             this.Experiment.PlaceOrganism(organism, experimentSetupElement.X, experimentSetupElement.Y);
             break;
           case ExperimentSetupElementType.Biomass:

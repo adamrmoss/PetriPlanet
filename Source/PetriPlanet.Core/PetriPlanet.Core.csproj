@@ -49,12 +49,10 @@
     <Compile Include="ColorExtensions.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="Experiments\ExperimentSetup.cs" />
-    <Compile Include="Experiments\ExperimentSetupElementConverter.cs" />
     <Compile Include="Organisms\Biomass.cs" />
     <Compile Include="Organisms\Instruction.cs" />
     <Compile Include="Organisms\Organism.cs" />
     <Compile Include="Experiments\WorldGridElement.cs" />
-    <Compile Include="Organisms\Computer.cs" />
     <Compile Include="Primes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Experiments\Experiment.cs" />

@@ -63,7 +63,7 @@ namespace PetriPlanet
         Orientation = Orientation.Horizontal,
         Minimum = 1,
         Maximum = 100,
-        TickFrequency = 1,
+        TickFrequency = 5,
         TickStyle = TickStyle.BottomRight,
         SmallChange = 1,
         LargeChange = 10,
@@ -94,7 +94,8 @@ namespace PetriPlanet
 
     private void OnUiTick(object sender, EventArgs eventArgs)
     {
-      this.Refresh();
+      this.clockLabel.Refresh();
+      this.worldView.Refresh();
     }
   }
 }
