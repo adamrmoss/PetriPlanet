@@ -5,11 +5,10 @@
     public Computer Computer { get; private set; }
 
     public float Energy { get; set; }
-    public Direction Direction { get; set; }
 
-    public Organism()
+    public Organism(Computer computer)
     {
-      this.Computer = new Computer();
+      this.Computer = computer;
     }
   }
 }

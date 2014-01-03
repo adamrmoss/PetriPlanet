@@ -25,7 +25,7 @@ namespace PetriPlanet
     {
       base.OnPaint(e);
 
-      var offset = WorldGridElement.WorldGridScale / 2;
+      const int offset = WorldGridElement.WorldGridScale / 2;
 
       var worldGridElements = experimentController.GetWorldGridElements();
       var width = worldGridElements.GetLength(0);

@@ -11,6 +11,8 @@
     <AssemblyName>PetriPlanet.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -43,6 +48,8 @@
     <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="ColorExtensions.cs" />
     <Compile Include="Direction.cs" />
+    <Compile Include="Experiments\ExperimentSetup.cs" />
+    <Compile Include="Experiments\ExperimentSetupElementConverter.cs" />
     <Compile Include="Organisms\Biomass.cs" />
     <Compile Include="Organisms\Instruction.cs" />
     <Compile Include="Organisms\Organism.cs" />
@@ -53,8 +60,11 @@
     <Compile Include="Experiments\Experiment.cs" />
     <Compile Include="Experiments\ExperimentController.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

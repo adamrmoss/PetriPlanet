@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
 using PetriPlanet.Core.Organisms;
 
 namespace PetriPlanet.Core.Experiments
@@ -39,27 +42,26 @@ namespace PetriPlanet.Core.Experiments
 
     public void Start()
     {
-      var organism = new Organism {
-        Energy = 248f,
-        Direction = Direction.South,
-      };
+      var json = File.ReadAllText(@"ExperimentSetup.json");
+      var experimentSetup = JsonConvert.DeserializeObject<ExperimentSetupElement[]>(json);
+      foreach (var experimentSetupElement in experimentSetup) {
+        switch (experimentSetupElement.Type) {
+          case ExperimentSetupElementType.Organism:
+            var computer = new Computer(experimentSetupElement.Direction, experimentSetupElement.Instructions);
 
-      this.Experiment.PlaceOrganism(organism, 10, 8);
-
-      var biomass1 = new Biomass {
-        Value = 64000,
-      };
-      this.Experiment.PlaceBiomass(biomass1, 11, 8);
-
-      var biomass2 = new Biomass {
-        Value = 65521,
-      };
-      this.Experiment.PlaceBiomass(biomass2, 9, 8);
-
-      var biomass3 = new Biomass {
-        Value = 29,
-      };
-      this.Experiment.PlaceBiomass(biomass3, 9, 9);
+            var organism = new Organism(computer) {
+              Energy = experimentSetupElement.Energy,
+            };
+            this.Experiment.PlaceOrganism(organism, experimentSetupElement.X, experimentSetupElement.Y);
+            break;
+          case ExperimentSetupElementType.Biomass:
+            var biomass = new Biomass {
+              Value = experimentSetupElement.Value,
+            };
+            this.Experiment.PlaceBiomass(biomass, experimentSetupElement.X, experimentSetupElement.Y);
+            break;
+        }
+      }
     }
 
     public void Tick()

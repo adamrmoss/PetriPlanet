@@ -102,7 +102,7 @@ namespace PetriPlanet.Core.Experiments
         return BuildEmpty();
       } else if (organism != null) {
         var intensity = organism.Energy / fullEnergyLevel;
-        return BuildOrganism(intensity, organism.Direction);
+        return BuildOrganism(intensity, organism.Computer.FacingDirection);
       } else if (biomass != null) {
         return BuildBiomass(biomass.Value);
       } else
