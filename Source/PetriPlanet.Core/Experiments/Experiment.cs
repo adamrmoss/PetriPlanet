@@ -6,23 +6,19 @@ namespace PetriPlanet.Core.Experiments
 {
   public class Experiment
   {
+    private static readonly TimeSpan tickIncrement = TimeSpan.FromSeconds(1);
+
     public int Width { get; private set; }
     public int Height { get; private set; }
     public object[,] WorldGrid { get; private set; }
     public HashSet<Organism> Organisms { get; private set; }
-    
     public DateTime CurrentTime { get; private set; }
-    public int TimeScale { get; private set; }
-
-    private DateTime lastCheckedTime;
 
     private Experiment()
     {
       this.Organisms = new HashSet<Organism>();
 
-      this.CurrentTime = new DateTime();
-      this.TimeScale = 1;
-      this.lastCheckedTime = DateTime.Now;
+      this.CurrentTime = new DateTime(1, 1, 1, 0, 0, 0);
     }
 
     public static Experiment Build(int width, int height)
@@ -52,14 +48,9 @@ namespace PetriPlanet.Core.Experiments
       this.WorldGrid[x, y] = biomass;
     }
 
-    public void UpdateCurrentTime()
+    public void Tick()
     {
-      var rawTimeSpan = DateTime.Now - this.lastCheckedTime;
-      var scaledTicks = this.TimeScale * rawTimeSpan.Ticks;
-      var scaledTimeSpan = new TimeSpan(scaledTicks);
-
-      this.CurrentTime += scaledTimeSpan;
-      this.lastCheckedTime = DateTime.Now;
+      this.CurrentTime += tickIncrement;
     }
   }
 }

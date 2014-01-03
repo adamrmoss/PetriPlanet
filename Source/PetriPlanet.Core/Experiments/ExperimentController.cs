@@ -19,11 +19,11 @@ namespace PetriPlanet.Core.Experiments
       return elements;
     }
 
-    public event Action WorldGridUpdated;
-    private void PublishWorldGridUpdated()
+    public event Action ExperimentUpdated;
+    private void PublishExperimentUpdated()
     {
-      if (this.WorldGridUpdated != null)
-        this.WorldGridUpdated();
+      if (this.ExperimentUpdated != null)
+        this.ExperimentUpdated();
     }
 
     private ExperimentController()
@@ -60,6 +60,12 @@ namespace PetriPlanet.Core.Experiments
         Value = 29,
       };
       this.Experiment.PlaceBiomass(biomass3, 9, 9);
+    }
+
+    public void Tick()
+    {
+      this.Experiment.Tick();
+      this.PublishExperimentUpdated();
     }
   }
 }

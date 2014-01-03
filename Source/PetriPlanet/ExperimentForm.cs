@@ -13,6 +13,7 @@ namespace PetriPlanet
     private TrackBar trackBar;
     private Label clockLabel;
     private Timer timer;
+    private WorldView worldView;
 
     public ExperimentForm()
     {
@@ -59,8 +60,8 @@ namespace PetriPlanet
       headerLayout.Controls.Add(this.trackBar);
 
       this.timer = new Timer {
-        Enabled = false,
-        Interval = 500,
+        Enabled = true,
+        Interval = 1000,
       };
       this.timer.Tick += this.OnTick;
     }
@@ -73,16 +74,16 @@ namespace PetriPlanet
 
     public void Start()
     {
-      var worldView = new WorldView(this.controller);
-
-      this.verticalLayout.Controls.Add(worldView);
-
+      this.worldView = new WorldView(this.controller);
+      this.verticalLayout.Controls.Add(this.worldView);
       this.controller.Start();
     }
 
     private void OnTick(object sender, EventArgs eventArgs)
     {
-      
+      this.controller.Tick();
+      this.clockLabel.Text = this.controller == null ? "-" : this.controller.Experiment.CurrentTime.ToString();
+      this.Refresh();
     }
   }
 }

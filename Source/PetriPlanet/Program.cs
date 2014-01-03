@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using PetriPlanet.Core;
 using PetriPlanet.Core.Experiments;
 
 namespace PetriPlanet
@@ -12,6 +13,8 @@ namespace PetriPlanet
     [STAThread]
     internal static void Main()
     {
+      var lookupTable = Primes.LookupTable;
+
       var simulation = Experiment.Build(width, height);
       var simulationController = ExperimentController.Build(simulation);
 
