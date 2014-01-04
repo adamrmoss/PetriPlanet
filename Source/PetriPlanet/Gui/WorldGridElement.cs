@@ -146,7 +146,7 @@ namespace PetriPlanet.Gui
 
       for (var i = 0; i < width; i++)
         for (var j = 0; j < height; j++)
-          elements[i, j] = WorldGridElement.Build(worldGrid[i, j]);
+          elements[i, j] = Build(worldGrid[i, j]);
 
       return elements;
     }

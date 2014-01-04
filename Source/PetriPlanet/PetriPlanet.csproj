@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gui\ColorExtensions.cs" />
     <Compile Include="Gui\ExperimentForm.cs">
       <SubType>Form</SubType>
     </Compile>

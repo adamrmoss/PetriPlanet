@@ -67,6 +67,9 @@ namespace PetriPlanet.Core.Experiments
 
     public void Tick()
     {
+      foreach (var organism in this.Organisms) {
+        organism.Tick();
+      }
       this.CurrentTime += tickIncrement;
       this.PublishExperimentUpdated();
     }

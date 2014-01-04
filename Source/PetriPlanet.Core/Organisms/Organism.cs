@@ -122,7 +122,9 @@ namespace PetriPlanet.Core.Organisms
         case Instruction.Walk: {
           if (facedObject == null) {
             this.experiment.WorldGrid[this.X, this.Y] = null;
-            this.experiment.WorldGrid[facingPosition.Item1, facingPosition.Item2] = this;
+            this.X = facingPosition.Item1;
+            this.Y = facingPosition.Item2;
+            this.experiment.WorldGrid[this.X, this.Y] = this;
           }
           break;
         }
@@ -190,23 +192,28 @@ namespace PetriPlanet.Core.Organisms
 
     private Tuple<ushort, ushort> GetFacingPosition()
     {
-      var newX = (ushort) (this.X + this.FacingDirection.GetDeltaX());
-      var newY = (ushort) (this.Y + this.FacingDirection.GetDeltaX());
-      return Tuple.Create(newX, newY);
+      return FollowDirectionToPosition(this.X, this.Y, this.FacingDirection);
     }
 
     private Tuple<ushort, ushort> GetAvailableAdjacentPosition()
     {
       var potentialDirection = this.FacingDirection;
       for (var i = 0; i < 4; i++) {
-        var newX = (ushort) (this.X + potentialDirection.GetDeltaX());
-        var newY = (ushort) (this.Y + potentialDirection.GetDeltaX());
-        var neighbor = this.experiment.WorldGrid[newX, newY];
+        var potentialPosition = this.FollowDirectionToPosition(this.X, this.Y, potentialDirection);
+
+        var neighbor = this.experiment.WorldGrid[potentialPosition.Item1, potentialPosition.Item2];
         if (neighbor == null)
-          return Tuple.Create(newX, newY);
+          return potentialPosition;
       }
 
       return null;
+    }
+
+    private Tuple<ushort, ushort> FollowDirectionToPosition(ushort x, ushort y, Direction direction)
+    {
+      var newX = (ushort) ((x + direction.GetDeltaX()) % this.experiment.WorldGrid.GetLength(0));
+      var newY = (ushort) ((y + direction.GetDeltaY()) % this.experiment.WorldGrid.GetLength(1));
+      return Tuple.Create(newX, newY);
     }
   }
 }

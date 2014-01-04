@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace PetriPlanet.Core
+namespace PetriPlanet.Gui
 {
   public static class ColorExtensions
   {
