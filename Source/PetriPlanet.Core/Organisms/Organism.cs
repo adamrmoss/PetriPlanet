@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
+using PetriPlanet.Core.Experiments;
 
 namespace PetriPlanet.Core.Organisms
 {
   public class Organism
   {
     private const int instructionCount = sizeof(short);
+
+    private readonly Experiment experiment;
 
     public Instruction[] Instructions { get; private set; }
     public Direction FacingDirection { get; private set; }
@@ -15,8 +18,9 @@ namespace PetriPlanet.Core.Organisms
     public ushort Cx { get; private set; }
     public ushort Ip { get; private set; }
 
-    public Organism(float energy, Direction facingDirection, Instruction[] instructions)
+    public Organism(Experiment experiment, Instruction[] instructions, Direction facingDirection, float energy)
     {
+      this.experiment = experiment;
       this.Energy = energy;
       this.FacingDirection = facingDirection;
 
