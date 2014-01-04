@@ -211,8 +211,11 @@ namespace PetriPlanet.Core.Organisms
 
     private Tuple<ushort, ushort> FollowDirectionToPosition(ushort x, ushort y, Direction direction)
     {
-      var newX = (ushort) ((x + direction.GetDeltaX()) % this.experiment.WorldGrid.GetLength(0));
-      var newY = (ushort) ((y + direction.GetDeltaY()) % this.experiment.WorldGrid.GetLength(1));
+      var width = this.experiment.WorldGrid.GetLength(0);
+      var height = this.experiment.WorldGrid.GetLength(1);
+
+      var newX = (ushort) ((x + direction.GetDeltaX() + width) % width);
+      var newY = (ushort) ((y + direction.GetDeltaY() + height) % height);
       return Tuple.Create(newX, newY);
     }
   }
