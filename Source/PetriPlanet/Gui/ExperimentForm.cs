@@ -30,7 +30,7 @@ namespace PetriPlanet.Gui
     private void Initialize()
     {
       this.Text = "Petri Planet";
-      this.BackColor = Color.DarkGray;
+      this.BackColor = Color.LightGray;
 
       this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
       this.AutoSize = true;
