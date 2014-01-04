@@ -9,8 +9,9 @@ namespace PetriPlanet.Core.Experiments
 {
   public class ExperimentSetup
   {
-    public int Width { get; set; }
-    public int Height { get; set; }
+    public int Seed { get; set; }
+    public ushort Width { get; set; }
+    public ushort Height { get; set; }
     public ExperimentSetupElement[] Elements { get; set; }
   }
 
@@ -23,11 +24,11 @@ namespace PetriPlanet.Core.Experiments
   public class ExperimentSetupElement
   {
     public ExperimentSetupElementType Type { get; set; }
-    public int X { get; set; }
-    public int Y { get; set; }
     public Instruction[] Instructions { get; set; }
-    public ushort Value { get; set; }
-    public float Energy { get; set; }
+    public ushort X { get; set; }
+    public ushort Y { get; set; }
     public Direction Direction { get; set; }
+    public ushort Value { get; set; }
+    public ushort Energy { get; set; }
   }
 }

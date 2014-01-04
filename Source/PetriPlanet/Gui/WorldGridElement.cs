@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using PetriPlanet.Core;
 using PetriPlanet.Core.Organisms;
 
-namespace PetriPlanet.Core.Experiments
+namespace PetriPlanet.Gui
 {
   public enum WorldGridElementType
   {
@@ -34,6 +35,7 @@ namespace PetriPlanet.Core.Experiments
   public class WorldGridElement
   {
     private const float fullEnergyLevel = 256f;
+    public const int WorldGridScale = 16;
 
     public WorldGridElementType Type { get; private set; }
     public float Intensity { get; private set; }
@@ -55,7 +57,7 @@ namespace PetriPlanet.Core.Experiments
           graphics.FillRectangle(brush, left, top, WorldGridScale, WorldGridScale);
           break;
         case WorldGridElementType.Organism:
-          var trianglePoints = GetTrianglePoints(Direction, left, top);
+          var trianglePoints = GetTrianglePoints(this.Direction, left, top);
           graphics.FillPolygon(brush, trianglePoints);
           break;
       }
@@ -136,6 +138,17 @@ namespace PetriPlanet.Core.Experiments
       };
     }
 
-    public const int WorldGridScale = 16;
+    public static WorldGridElement[,] GetWorldGridElements(object[,] worldGrid)
+    {
+      var width = worldGrid.GetLength(0);
+      var height = worldGrid.GetLength(1);
+      var elements = new WorldGridElement[width, height];
+
+      for (var i = 0; i < width; i++)
+        for (var j = 0; j < height; j++)
+          elements[i, j] = WorldGridElement.Build(worldGrid[i, j]);
+
+      return elements;
+    }
   }
 }

@@ -58,5 +58,13 @@ namespace PetriPlanet.Core.Collections
     {
       return partialProduct.SelectMany(currentTuple => currentSet.Select(setItem => currentTuple.Append(setItem).ToList())).ToList();
     }
+
+    public static IEnumerable<T> Repeat<T>(this IEnumerable<T> sequence, int times)
+    {
+      for (var i = 0; i < times; i++) {
+        foreach (var element in sequence)
+          yield return element;
+      }
+    }
   }
 }

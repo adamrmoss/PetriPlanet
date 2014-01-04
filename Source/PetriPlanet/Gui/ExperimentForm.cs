@@ -3,11 +3,13 @@ using System.Drawing;
 using System.Windows.Forms;
 using PetriPlanet.Core.Experiments;
 
-namespace PetriPlanet
+namespace PetriPlanet.Gui
 {
   public class ExperimentForm : Form
   {
-    private const string dreamtimeFormatString = "yyyy-MM-dd HH:mm:ss";
+    //private const string dreamtimeFormatString = "yyyy-MM-dd HH:mm:ss";
+    private const string dreamtimeFormatString = "MM/dd/yyyy HH:mm:ss";
+    private const int maxSpeed = 100;
 
     private readonly Experiment experiment;
 
@@ -62,7 +64,7 @@ namespace PetriPlanet
       this.trackBar = new TrackBar {
         Orientation = Orientation.Horizontal,
         Minimum = 1,
-        Maximum = 100,
+        Maximum = maxSpeed,
         TickFrequency = 5,
         TickStyle = TickStyle.BottomRight,
         SmallChange = 1,
@@ -89,7 +91,8 @@ namespace PetriPlanet
     {
       this.experiment.Tick();
       this.clockLabel.Text = this.experiment.CurrentTime.ToString(dreamtimeFormatString);
-      this.simulationTimer.Interval = 1000 / this.trackBar.Value;
+      var trackBarValue = this.trackBar.Value;
+      this.simulationTimer.Interval = trackBarValue == maxSpeed ? 1 : 1000 / trackBarValue;
     }
 
     private void OnUiTick(object sender, EventArgs eventArgs)

@@ -8,12 +8,9 @@ namespace PetriPlanet.Core.Organisms
 {
   public enum Instruction : byte
   {
-    NopX,
-    NopB,
-    NopC,
+    Nop,
     IfNot0,
     IfNotEq,
-    IfOdd,
     JumpBackward,
     JumpForward,
     ShiftLeft,
@@ -21,7 +18,6 @@ namespace PetriPlanet.Core.Organisms
     Increment,
     Decrement,
     Clear,
-    SetNumber,
     Add,
     Subtract,
     Swap,

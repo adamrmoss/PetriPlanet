@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using PetriPlanet.Core;
 using PetriPlanet.Core.Experiments;
+using PetriPlanet.Gui;
 
 namespace PetriPlanet
 {

@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using PetriPlanet.Core.Experiments;
 
-namespace PetriPlanet
+namespace PetriPlanet.Gui
 {
   public class WorldView : Control
   {
@@ -27,7 +27,7 @@ namespace PetriPlanet
 
       const int offset = WorldGridElement.WorldGridScale / 2;
 
-      var worldGridElements = this.experiment.GetWorldGridElements();
+      var worldGridElements = WorldGridElement.GetWorldGridElements(this.experiment.WorldGrid);
       var width = worldGridElements.GetLength(0);
       var height = worldGridElements.GetLength(1);
 
