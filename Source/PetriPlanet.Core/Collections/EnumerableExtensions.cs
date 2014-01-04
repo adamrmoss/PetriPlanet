@@ -66,5 +66,18 @@ namespace PetriPlanet.Core.Collections
           yield return element;
       }
     }
+
+    public static TEnum[] GetAllEnumValues<TEnum>()
+    {
+      return Enum.GetValues(typeof(TEnum)).Cast<TEnum>().ToArray();
+    }
+
+    public static T GetRandomElement<T>(this IEnumerable<T> sequence, Random random)
+    {
+      var sequenceAsArray = sequence as T[] ?? sequence.ToArray();
+      var index = random.Next(sequenceAsArray.Length);
+
+      return sequenceAsArray[index];
+    }
   }
 }

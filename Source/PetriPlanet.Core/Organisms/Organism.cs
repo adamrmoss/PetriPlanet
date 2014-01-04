@@ -9,6 +9,7 @@ namespace PetriPlanet.Core.Organisms
   public class Organism
   {
     private const int instructionCount = 1 << (8 * sizeof(ushort));
+    private static Instruction[] allInstructions = EnumerableExtensions.GetAllEnumValues<Instruction>();
 
     private readonly Experiment experiment;
 
@@ -26,8 +27,7 @@ namespace PetriPlanet.Core.Organisms
     {
       this.experiment = experiment;
 
-      var totalInstructions = BuildTotalInstructions(instructions);
-      this.Instructions = totalInstructions;
+      this.Instructions = BuildTotalInstructions(instructions);
 
       this.X = x;
       this.Y = y;
@@ -35,8 +35,11 @@ namespace PetriPlanet.Core.Organisms
       this.Energy = energy;
     }
 
-    private static Instruction[] BuildTotalInstructions(Instruction[] instructions)
+    private Instruction[] BuildTotalInstructions(Instruction[] instructions)
     {
+      if (instructions == null)
+        return Enumerable.Range(0, instructionCount).Select(i => allInstructions.GetRandomElement(this.experiment.Random)).ToArray();
+
       if (instructions.Length > instructionCount)
         throw new InvalidOperationException("instructions.Length > instructionCount");
 
@@ -116,9 +119,11 @@ namespace PetriPlanet.Core.Organisms
             goto case Instruction.Swap;
           break;
         case Instruction.Reproduce:
-          throw new NotImplementedException();
+          //throw new NotImplementedException();
+          break;
         case Instruction.Excrete:
-          throw new NotImplementedException();
+          //throw new NotImplementedException();
+          break;
         case Instruction.Walk: {
           if (facedObject == null) {
             this.experiment.WorldGrid[this.X, this.Y] = null;
