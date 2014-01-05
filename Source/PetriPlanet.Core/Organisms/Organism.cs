@@ -200,7 +200,7 @@ namespace PetriPlanet.Core.Organisms
       return FollowDirectionToPosition(this.X, this.Y, this.FacingDirection);
     }
 
-    private Tuple<ushort, ushort> GetAvailableAdjacentPosition()
+    private Direction? GetDirectionToAvailableAdjacentPosition()
     {
       var potentialDirection = this.FacingDirection;
       for (var i = 0; i < 4; i++) {
@@ -208,7 +208,7 @@ namespace PetriPlanet.Core.Organisms
 
         var neighbor = this.experiment.WorldGrid[potentialPosition.Item1, potentialPosition.Item2];
         if (neighbor == null)
-          return potentialPosition;
+          return potentialDirection;
       }
 
       return null;
