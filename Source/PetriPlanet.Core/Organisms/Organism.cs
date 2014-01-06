@@ -62,9 +62,17 @@ namespace PetriPlanet.Core.Organisms
     public void Tick()
     {
       var facingPosition = this.GetFacingPosition();
-      var facedObject = this.experiment.WorldGrid[facingPosition.Item1, facingPosition.Item2];
+      var facedOrganism = this.experiment.Organisms[facingPosition.Item1, facingPosition.Item2];
+      var facedBiomass = this.experiment.Biomasses[facingPosition.Item1, facingPosition.Item2];
 
       var currentInstruction = this.Instructions[this.Ip];
+      
+      this.Energy = (ushort) Math.Max(this.Energy - EnergyCost(currentInstruction), 0);
+      if (this.Energy == 0) {
+        this.experiment.DestroyOrganism(this);
+        return;
+      }
+
       switch (currentInstruction) {
         case Instruction.Nop:
           break;
@@ -124,11 +132,11 @@ namespace PetriPlanet.Core.Organisms
           //throw new NotImplementedException();
           break;
         case Instruction.Walk: {
-          if (facedObject == null) {
-            this.experiment.WorldGrid[this.X, this.Y] = null;
+          if (facedOrganism == null) {
+            this.experiment.Organisms[this.X, this.Y] = null;
             this.X = facingPosition.Item1;
             this.Y = facingPosition.Item2;
-            this.experiment.WorldGrid[this.X, this.Y] = this;
+            this.experiment.Organisms[this.X, this.Y] = this;
           }
           break;
         }
@@ -138,33 +146,52 @@ namespace PetriPlanet.Core.Organisms
         case Instruction.TurnRight:
           this.FacingDirection = this.FacingDirection.TurnRight();
           break;
-        case Instruction.Sense: {
-          this.Ax = 0;
-          this.Cx = 0;
-
-          if (facedObject == null)
-            break;
-
-          var otherOrganism = facedObject as Organism;
-          if (otherOrganism != null) {
-            this.Ax = otherOrganism.Energy;
-            break;
-          }
-
-          var biomass = facedObject as Biomass;
-          if (biomass != null) {
-            this.Cx = biomass.Value;
-            break;
-          }
-
-          throw new NotImplementedException();
-        }
+        case Instruction.Sense:
+          this.Ax = facedOrganism != null ? facedOrganism.Energy : (ushort) 0;
+          this.Cx = facedBiomass != null ? facedBiomass.Value : (ushort) 0;
+          break;
         case Instruction.Imagine:
           this.Ax = (ushort) this.experiment.Random.Next(Ushorts.UshortCount);
           break;
       }
 
       this.IncrementIp();
+    }
+
+    private static ushort EnergyCost(Instruction instruction)
+    {
+      switch (instruction) {
+        case Instruction.Nop:
+        case Instruction.IfNot0:
+        case Instruction.IfNotEq:
+        case Instruction.JumpBackward:
+        case Instruction.JumpForward:
+        case Instruction.ShiftLeft:
+        case Instruction.ShiftRight:
+        case Instruction.Increment:
+        case Instruction.Decrement:
+        case Instruction.Clear:
+        case Instruction.Add:
+        case Instruction.Subtract:
+        case Instruction.Swap:
+        case Instruction.Sort:
+          return 1;
+        case Instruction.Reproduce:
+          return 25;
+        case Instruction.Excrete:
+          return 5;
+        case Instruction.Walk:
+          return 5;
+        case Instruction.TurnLeft:
+        case Instruction.TurnRight:
+          return 2;
+        case Instruction.Sense:
+          return 10;
+        case Instruction.Imagine:
+          return 2;
+        default:
+          throw new ArgumentException("Instruction not found: " + instruction);
+      }
     }
 
     private void IncrementIp()
@@ -199,28 +226,37 @@ namespace PetriPlanet.Core.Organisms
       return FollowDirectionToPosition(this.X, this.Y, this.FacingDirection);
     }
 
-    private Direction? GetDirectionToAvailableAdjacentPosition()
+    private Direction? GetDirectionToEmptyAdjacentPosition()
     {
-      var potentialDirection = this.FacingDirection;
-      for (var i = 0; i < 4; i++) {
-        var potentialPosition = this.FollowDirectionToPosition(this.X, this.Y, potentialDirection);
-
-        var neighbor = this.experiment.WorldGrid[potentialPosition.Item1, potentialPosition.Item2];
-        if (neighbor == null)
-          return potentialDirection;
-      }
-
-      return null;
+      var directions = EnumerableExtensions.GetAllEnumValues<Direction>().Cast<Direction?>().ToArray();
+      return directions.FirstOrDefault(direction => this.PositionIsEmpty(this.FollowDirectionToPosition(this.X, this.Y, direction)));
     }
 
-    private Tuple<ushort, ushort> FollowDirectionToPosition(ushort x, ushort y, Direction direction)
+    private Direction? GetDirectionToHabitableAdjacentPosition()
     {
-      var width = this.experiment.WorldGrid.GetLength(0);
-      var height = this.experiment.WorldGrid.GetLength(1);
+      var directions = EnumerableExtensions.GetAllEnumValues<Direction>().Cast<Direction?>().ToArray();
+      return directions.FirstOrDefault(direction => this.PositionIsEmpty(this.FollowDirectionToPosition(this.X, this.Y, direction))) ??
+             directions.FirstOrDefault(direction => this.PositionIsUnoccupied(this.FollowDirectionToPosition(this.X, this.Y, direction)));
+    }
 
-      var newX = (ushort) ((x + direction.GetDeltaX() + width) % width);
-      var newY = (ushort) ((y + direction.GetDeltaY() + height) % height);
+    private Tuple<ushort, ushort> FollowDirectionToPosition(ushort x, ushort y, Direction? direction)
+    {
+      if (direction == null)
+        return null;
+
+      var newX = (ushort) ((x + direction.Value.GetDeltaX() + this.experiment.Width) % this.experiment.Width);
+      var newY = (ushort) ((y + direction.Value.GetDeltaY() + this.experiment.Height) % this.experiment.Height);
       return Tuple.Create(newX, newY);
+    }
+
+    private bool PositionIsUnoccupied(Tuple<ushort, ushort> position)
+    {
+      return this.experiment.Organisms[position.Item1, position.Item2] == null;
+    }
+
+    private bool PositionIsEmpty(Tuple<ushort, ushort> position)
+    {
+      return this.experiment.Organisms[position.Item1, position.Item2] == null && this.experiment.Biomasses[position.Item1, position.Item2] == null; ;
     }
   }
 }

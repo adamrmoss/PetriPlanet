@@ -27,7 +27,7 @@ namespace PetriPlanet.Gui
 
       const int offset = WorldGridElement.WorldGridScale / 2;
 
-      var worldGridElements = WorldGridElement.GetWorldGridElements(this.experiment.WorldGrid);
+      var worldGridElements = WorldGridElement.GetWorldGridElements(this.experiment.Organisms, this.experiment.Biomasses);
       var width = worldGridElements.GetLength(0);
       var height = worldGridElements.GetLength(1);
 

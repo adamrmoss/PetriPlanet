@@ -34,7 +34,6 @@ namespace PetriPlanet.Gui
 
   public class WorldGridElement
   {
-    private const float fullEnergyLevel = 256f;
     public const int WorldGridScale = 16;
 
     public WorldGridElementType Type { get; private set; }
@@ -91,46 +90,23 @@ namespace PetriPlanet.Gui
             new Point(left + WorldGridScale, top + WorldGridScale / 2),
           };
         default:
-          throw new ArgumentException("Direction cannot be null: " + direction);
+          throw new ArgumentException("Direction not found: " + direction);
       }
     }
 
-    public static WorldGridElement Build(object obj)
+    public static WorldGridElement BuildOrganismElement(Organism organism)
     {
-      var organism = obj as Organism;
-      var biomass = obj as Biomass;
-
-      if (obj == null) {
-        return BuildEmpty();
-      } else if (organism != null) {
-        var intensity = organism.Energy / fullEnergyLevel;
-        return BuildOrganism(intensity, organism.FacingDirection);
-      } else if (biomass != null) {
-        return BuildBiomass(biomass.Value);
-      } else
-        throw new InvalidOperationException(String.Format("Unknown Object: {0}, cannot Build WorldGridElement", obj));
-    }
-
-    private static WorldGridElement BuildEmpty()
-    {
+      var intensity = organism.Energy / Ushorts.UshortCount;
       return new WorldGridElement {
-        Type = WorldGridElementType.Empty, 
-        Intensity = 1f,
+        Type = WorldGridElementType.Organism,
+        Intensity = intensity,
+        Direction = organism.FacingDirection,
       };
     }
 
-    private static WorldGridElement BuildOrganism(float intensity, Direction direction)
+    public static WorldGridElement BuildBiomassElement(Biomass biomass)
     {
-      return new WorldGridElement {
-        Type = WorldGridElementType.Organism, 
-        Intensity = intensity, 
-        Direction = direction,
-      };
-    }
-
-    private static WorldGridElement BuildBiomass(ushort value)
-    {
-      var type = Primes.LookupTable[value] ? WorldGridElementType.Food : WorldGridElementType.Poison;
+      var type = Primes.LookupTable[biomass.Value] ? WorldGridElementType.Food : WorldGridElementType.Poison;
 
       return new WorldGridElement {
         Type = type,
@@ -138,15 +114,28 @@ namespace PetriPlanet.Gui
       };
     }
 
-    public static WorldGridElement[,] GetWorldGridElements(object[,] worldGrid)
+    public static WorldGridElement BuildEmpty()
     {
-      var width = worldGrid.GetLength(0);
-      var height = worldGrid.GetLength(1);
+      return new WorldGridElement {
+        Type = WorldGridElementType.Empty,
+        Intensity = 1f,
+      };
+    }
+
+    public static WorldGridElement[,] GetWorldGridElements(Organism[,] organisms, Biomass[,] biomasses)
+    {
+      var width = organisms.GetLength(0);
+      var height = organisms.GetLength(1);
       var elements = new WorldGridElement[width, height];
 
-      for (var i = 0; i < width; i++)
-        for (var j = 0; j < height; j++)
-          elements[i, j] = Build(worldGrid[i, j]);
+      for (var i = 0; i < width; i++) {
+        for (var j = 0; j < height; j++) {
+          var organism = organisms[i, j];
+          var biomass = biomasses[i, j];
+          elements[i, j] = organism != null ? BuildOrganismElement(organism) :
+                           biomass != null ? BuildBiomassElement(biomass) : BuildEmpty();
+        }
+      }
 
       return elements;
     }
