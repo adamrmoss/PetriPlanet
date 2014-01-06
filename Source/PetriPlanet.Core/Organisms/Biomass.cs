@@ -10,7 +10,18 @@ namespace PetriPlanet.Core.Organisms
   {
     public ushort X { get; private set; }
     public ushort Y { get; private set; }
+
     public ushort Value { get; private set; }
+
+    public bool IsFood
+    {
+      get { return Primes.LookupTable[this.Value]; }
+    }
+
+    public bool IsPoison
+    {
+      get { return !this.IsFood; }
+    }
 
     public Biomass(ushort x, ushort y, ushort value)
     {

@@ -23,5 +23,22 @@ namespace PetriPlanet.Specs
       Expect(Primes.LookupTable[5], True);
       Expect(Primes.LookupTable[6], False);
     }
+
+    [Test]
+    public void Largest_prime()
+    {
+      var largestPrime = GetLargestPrime();
+      Expect(largestPrime, EqualTo(Primes.LargestPrime));
+    }
+
+    private static ushort GetLargestPrime()
+    {
+      for (var i = (ushort) (Ushorts.UshortCount - 1); i > 2; i--) {
+        if (Primes.LookupTable[i])
+          return i;
+      }
+
+      return 0;
+    }
   }
 }

@@ -9,6 +9,7 @@ namespace PetriPlanet.Core
   public static class Primes
   {
     public static bool[] LookupTable { get; private set; }
+    public const ushort LargestPrime = 65521;
 
     static Primes()
     {

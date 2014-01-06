@@ -61,13 +61,23 @@ namespace PetriPlanet.Core.Organisms
 
     public void Tick()
     {
+      var presentBiomass = this.experiment.Biomasses[this.X, this.Y];
+      if (presentBiomass != null) {
+        if (presentBiomass.IsFood)
+          this.AbsorbEnergy(presentBiomass.Value);
+        else
+          this.DeductEnergy(presentBiomass.Value);
+        this.experiment.DestroyBiomass(presentBiomass);
+      }
+
       var facingPosition = this.GetFacingPosition();
       var facedOrganism = this.experiment.Organisms[facingPosition.Item1, facingPosition.Item2];
       var facedBiomass = this.experiment.Biomasses[facingPosition.Item1, facingPosition.Item2];
 
       var currentInstruction = this.Instructions[this.Ip];
-      
-      this.Energy = (ushort) Math.Max(this.Energy - EnergyCost(currentInstruction), 0);
+
+      var energyCost = EnergyCost(currentInstruction);
+      this.DeductEnergy(energyCost);
       if (this.Energy == 0) {
         this.experiment.DestroyOrganism(this);
         return;
@@ -158,6 +168,16 @@ namespace PetriPlanet.Core.Organisms
       this.IncrementIp();
     }
 
+    private void DeductEnergy(ushort energy)
+    {
+      this.Energy = (ushort) Math.Max(this.Energy - energy, 0);
+    }
+
+    private void AbsorbEnergy(ushort energy)
+    {
+      this.Energy = (ushort) Math.Min(this.Energy + energy, Ushorts.UshortCount - 1);
+    }
+
     private static ushort EnergyCost(Instruction instruction)
     {
       switch (instruction) {
@@ -177,16 +197,16 @@ namespace PetriPlanet.Core.Organisms
         case Instruction.Sort:
           return 1;
         case Instruction.Reproduce:
-          return 25;
+          return 128;
         case Instruction.Excrete:
-          return 5;
+          return 4;
         case Instruction.Walk:
-          return 5;
+          return 8;
         case Instruction.TurnLeft:
         case Instruction.TurnRight:
           return 2;
         case Instruction.Sense:
-          return 10;
+          return 2;
         case Instruction.Imagine:
           return 2;
         default:

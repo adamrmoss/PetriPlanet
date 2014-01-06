@@ -21,7 +21,7 @@ namespace PetriPlanet.Gui
         case WorldGridElementType.Empty:
           return Color.DarkGray;
         case WorldGridElementType.Organism:
-          return Color.Green;
+          return Color.LightGreen;
         case WorldGridElementType.Poison:
           return Color.Firebrick;
         case WorldGridElementType.Food:
@@ -96,7 +96,7 @@ namespace PetriPlanet.Gui
 
     public static WorldGridElement BuildOrganismElement(Organism organism)
     {
-      var intensity = organism.Energy / Ushorts.UshortCount;
+      var intensity = (float) organism.Energy / Ushorts.UshortCount;
       return new WorldGridElement {
         Type = WorldGridElementType.Organism,
         Intensity = intensity,
@@ -107,10 +107,11 @@ namespace PetriPlanet.Gui
     public static WorldGridElement BuildBiomassElement(Biomass biomass)
     {
       var type = Primes.LookupTable[biomass.Value] ? WorldGridElementType.Food : WorldGridElementType.Poison;
+      var intensity = (float) biomass.Value / Ushorts.UshortCount;
 
       return new WorldGridElement {
         Type = type,
-        Intensity = 1f,
+        Intensity = intensity,
       };
     }
 
