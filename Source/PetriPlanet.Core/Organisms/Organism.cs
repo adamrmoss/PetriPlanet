@@ -37,16 +37,16 @@ namespace PetriPlanet.Core.Organisms
     private Instruction[] BuildTotalInstructions(Instruction[] instructions)
     {
       if (instructions == null)
-        return Enumerable.Range(0, instructionCount).Select(i => allInstructions.GetRandomElement(this.experiment.Random)).ToArray();
+        return Enumerable.Range(0, Ushorts.UshortCount).Select(i => allInstructions.GetRandomElement(this.experiment.Random)).ToArray();
 
-      if (instructions.Length > instructionCount)
+      if (instructions.Length > Ushorts.UshortCount)
         throw new InvalidOperationException("instructions.Length > instructionCount");
 
       if (instructions.Length == 0)
-        return GetExtraInstructions(instructionCount).ToArray();
+        return GetExtraInstructions(Ushorts.UshortCount).ToArray();
 
-      var divisor = instructionCount / instructions.Length;
-      var remainder = instructionCount % instructions.Length;
+      var divisor = Ushorts.UshortCount / instructions.Length;
+      var remainder = Ushorts.UshortCount % instructions.Length;
 
       var repeatedInstructions = instructions.Repeat(divisor);
       var extraInstructions = GetExtraInstructions(remainder);
@@ -160,7 +160,7 @@ namespace PetriPlanet.Core.Organisms
           throw new NotImplementedException();
         }
         case Instruction.Imagine:
-          this.Ax = (ushort) this.experiment.Random.Next(instructionCount);
+          this.Ax = (ushort) this.experiment.Random.Next(Ushorts.UshortCount);
           break;
       }
 
@@ -185,7 +185,7 @@ namespace PetriPlanet.Core.Organisms
 
     private ushort NextNop(ushort startingIndex)
     {
-      for (var index = startingIndex + 1; index < instructionCount; index++)
+      for (var index = startingIndex + 1; index < Ushorts.UshortCount; index++)
         if (this.Instructions[index] == Instruction.Nop)
           return (ushort) index;
       for (var index = 0; index < startingIndex; index++)

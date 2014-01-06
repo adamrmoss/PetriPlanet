@@ -65,6 +65,5 @@ namespace PetriPlanet.Core.Experiments
       }
       this.CurrentTime += tickIncrement;
     }
-    }
   }
 }
