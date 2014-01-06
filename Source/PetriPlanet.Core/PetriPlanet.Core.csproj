@@ -54,6 +54,7 @@
     <Compile Include="Primes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Experiments\Experiment.cs" />
+    <Compile Include="Ushorts.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

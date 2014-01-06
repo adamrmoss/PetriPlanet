@@ -13,12 +13,6 @@ namespace PetriPlanet.Specs
   public class PrimesSpecs : BddBase<PrimesSpecs>
   {
     [Test]
-    public void Array_size_should_be_65536()
-    {
-      Expect(Primes.LookupTableSize, EqualTo(65536));
-    }
-
-    [Test]
     public void First_few_primes()
     {
       Expect(Primes.LookupTable[0], False);

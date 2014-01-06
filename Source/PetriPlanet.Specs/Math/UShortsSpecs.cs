@@ -1,10 +1,17 @@
 ﻿using NUnit.Framework;
+using PetriPlanet.Core;
 
 namespace PetriPlanet.Specs.Math
 {
   [TestFixture]
-  public class UShorts : AssertionHelper
+  public class UShortsSpecs : AssertionHelper
   {
+    [Test]
+    public void Count_should_be_65536()
+    {
+      Expect(Ushorts.UshortCount, EqualTo(65536));
+    }
+
     [Test]
     public void It_should_wrap_around_increment_to_zero()
     {

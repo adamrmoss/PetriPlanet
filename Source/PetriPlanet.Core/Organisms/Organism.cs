@@ -8,8 +8,7 @@ namespace PetriPlanet.Core.Organisms
 {
   public class Organism
   {
-    private const int instructionCount = 1 << (8 * sizeof(ushort));
-    private static Instruction[] allInstructions = EnumerableExtensions.GetAllEnumValues<Instruction>();
+    private static readonly Instruction[] allInstructions = EnumerableExtensions.GetAllEnumValues<Instruction>();
 
     private readonly Experiment experiment;
 

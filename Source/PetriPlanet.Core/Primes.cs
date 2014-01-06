@@ -8,13 +8,12 @@ namespace PetriPlanet.Core
 {
   public static class Primes
   {
-    public const int LookupTableSize = 1 << (8 * sizeof(ushort));
     public static bool[] LookupTable { get; private set; }
 
     static Primes()
     {
-      LookupTable = new bool[LookupTableSize];
-      for (var i = 2; i < LookupTableSize; i++) {
+      LookupTable = new bool[Ushorts.UshortCount];
+      for (var i = 2; i < Ushorts.UshortCount; i++) {
         var factorLimit = (int) Math.Sqrt(i);
 
         var isPrime = true;

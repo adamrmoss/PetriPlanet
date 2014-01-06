@@ -16,13 +16,6 @@ namespace PetriPlanet.Core.Experiments
     public DateTime CurrentTime { get; private set; }
     public Random Random { get; private set; }
 
-    public event Action ExperimentUpdated;
-    private void PublishExperimentUpdated()
-    {
-      if (this.ExperimentUpdated != null)
-        this.ExperimentUpdated();
-    }
-
     public Experiment(ExperimentSetup setup)
     {
       this.Width = setup.Width;
@@ -71,7 +64,7 @@ namespace PetriPlanet.Core.Experiments
         organism.Tick();
       }
       this.CurrentTime += tickIncrement;
-      this.PublishExperimentUpdated();
+    }
     }
   }
 }
