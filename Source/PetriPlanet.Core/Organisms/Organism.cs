@@ -39,11 +39,11 @@ namespace PetriPlanet.Core.Organisms
       if (instructions == null)
         return Enumerable.Range(0, Ushorts.UshortCount).Select(i => allInstructions.GetRandomElement(this.experiment.Random)).ToArray();
 
-      if (instructions.Length > Ushorts.UshortCount)
-        throw new InvalidOperationException("instructions.Length > instructionCount");
-
       if (instructions.Length == 0)
         return GetExtraInstructions(Ushorts.UshortCount).ToArray();
+
+      if (instructions.Length > Ushorts.UshortCount)
+        throw new InvalidOperationException("instructions.Length > Ushorts.UshortCount");
 
       var divisor = Ushorts.UshortCount / instructions.Length;
       var remainder = Ushorts.UshortCount % instructions.Length;
