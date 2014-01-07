@@ -64,6 +64,8 @@ namespace PetriPlanet.Core.Experiments
       this.SetOfOrganisms.Remove(organism);
 
       this.Organisms[organism.X, organism.Y] = null;
+      var corpse = new Biomass(organism.X, organism.Y, (ushort) this.Random.Next(Ushorts.Count));
+      this.SetupBiomass(corpse);
     }
 
     public void SetupBiomass(Biomass biomass)

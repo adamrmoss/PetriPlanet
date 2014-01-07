@@ -279,19 +279,6 @@ namespace PetriPlanet.Core.Organisms
       return FollowDirectionToPosition(this.X, this.Y, this.FacingDirection);
     }
 
-    private Direction? GetDirectionToEmptyAdjacentPosition()
-    {
-      var directions = EnumerableExtensions.GetAllEnumValues<Direction>().Cast<Direction?>().ToArray();
-      return directions.FirstOrDefault(direction => this.PositionIsEmpty(this.FollowDirectionToPosition(this.X, this.Y, direction)));
-    }
-
-    private Direction? GetDirectionToHabitableAdjacentPosition()
-    {
-      var directions = EnumerableExtensions.GetAllEnumValues<Direction>().Cast<Direction?>().ToArray();
-      return directions.FirstOrDefault(direction => this.PositionIsEmpty(this.FollowDirectionToPosition(this.X, this.Y, direction))) ??
-             directions.FirstOrDefault(direction => this.PositionIsUnoccupied(this.FollowDirectionToPosition(this.X, this.Y, direction)));
-    }
-
     private Tuple<ushort, ushort> FollowDirectionToPosition(ushort x, ushort y, Direction? direction)
     {
       if (direction == null)
@@ -317,12 +304,20 @@ namespace PetriPlanet.Core.Organisms
       var mutatedInstructions = new Instruction[Ushorts.Count];
       Array.Copy(this.Instructions, mutatedInstructions, Ushorts.Count);
 
-      const ushort minMutations = 1;
-      const ushort maxMutations = 100;
+      const int minSwaps = 100;
+      const int maxSwaps = 1000;
 
-      var numMutations = (ushort) this.experiment.Random.Next(minMutations, maxMutations);
-      for (var i = 0; i < numMutations; i++) {
+      var numSwaps = this.experiment.Random.Next(minSwaps, maxSwaps);
+      for (var i = 0; i < numSwaps; i++) {
         this.SwapRandomInstructionBlocks(mutatedInstructions);
+      }
+
+      const int minRandomizations = 100;
+      const int maxRandomizations = 1000;
+      var numRandomizations = this.experiment.Random.Next(minRandomizations, maxRandomizations);
+      for (var i = 0; i < numRandomizations; i++) {
+        var index = this.experiment.Random.Next(Ushorts.Count);
+        mutatedInstructions[index] = allInstructions.GetRandomElement(this.experiment.Random);
       }
 
       return mutatedInstructions;
