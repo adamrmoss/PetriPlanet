@@ -13,6 +13,8 @@ namespace PetriPlanet.Core.Organisms
     private readonly Experiment experiment;
 
     public Instruction[] Instructions { get; private set; }
+    public ushort[] Stack { get; private set; }
+
     public Direction FacingDirection { get; private set; }
     public ushort X { get; private set; }
     public ushort Y { get; private set; }
@@ -21,12 +23,14 @@ namespace PetriPlanet.Core.Organisms
     public ushort Ax { get; private set; }
     public ushort Cx { get; private set; }
     public ushort Ip { get; private set; }
+    public ushort Sp { get; private set; }
 
     public Organism(Experiment experiment, Instruction[] instructions, ushort x, ushort y, Direction facingDirection, ushort energy)
     {
       this.experiment = experiment;
 
       this.Instructions = BuildTotalInstructions(instructions);
+      this.Stack = new ushort[Ushorts.Count];
 
       this.X = x;
       this.Y = y;
@@ -135,8 +139,18 @@ namespace PetriPlanet.Core.Organisms
           if (this.Ax > this.Cx)
             goto case Instruction.Swap;
           break;
+        case Instruction.Push:
+          this.Sp++;
+          this.Stack[this.Sp] = this.Ax;
+          break;
+        case Instruction.Pop:
+          this.Ax = this.Stack[this.Sp];
+          this.Sp--;
+          break;
+        case Instruction.Peek:
+          this.Ax = this.Stack[this.Sp];
+          break;
         case Instruction.Reproduce:
-          //throw new NotImplementedException();
           break;
         case Instruction.Excrete:
           //throw new NotImplementedException();
@@ -195,6 +209,9 @@ namespace PetriPlanet.Core.Organisms
         case Instruction.Subtract:
         case Instruction.Swap:
         case Instruction.Sort:
+        case Instruction.Push:
+        case Instruction.Pop:
+        case Instruction.Peek:
           return 1;
         case Instruction.Reproduce:
           return 128;
