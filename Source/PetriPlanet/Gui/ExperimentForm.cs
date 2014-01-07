@@ -31,7 +31,7 @@ namespace PetriPlanet.Gui
     {
       this.MaximizeBox = false;
       this.Text = "Petri Planet";
-      this.BackColor = Color.LightGray;
+      this.BackColor = Color.Black;
 
       this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
       this.AutoSize = true;
@@ -56,6 +56,7 @@ namespace PetriPlanet.Gui
       var initialTime = this.experiment.CurrentTime.ToString(dreamtimeFormatString);
       this.clockLabel = new Label {
         Text = initialTime,
+        ForeColor = Color.LightGray,
         AutoSize = true,
         // Hackish
         Width = 150,

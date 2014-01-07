@@ -18,7 +18,7 @@ namespace PetriPlanet.Gui
     {
       this.Width = (this.experiment.Width + 1) * WorldGridElement.WorldGridScale;
       this.Height = (this.experiment.Height + 1) * WorldGridElement.WorldGridScale;
-      this.BackColor = Color.DarkGray;
+      this.BackColor = Color.Black;
     }
 
     protected override void OnPaint(PaintEventArgs e)
