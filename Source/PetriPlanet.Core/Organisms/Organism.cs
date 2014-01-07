@@ -289,16 +289,6 @@ namespace PetriPlanet.Core.Organisms
       return Tuple.Create(newX, newY);
     }
 
-    private bool PositionIsUnoccupied(Tuple<ushort, ushort> position)
-    {
-      return this.experiment.Organisms[position.Item1, position.Item2] == null;
-    }
-
-    private bool PositionIsEmpty(Tuple<ushort, ushort> position)
-    {
-      return this.experiment.Organisms[position.Item1, position.Item2] == null && this.experiment.Biomasses[position.Item1, position.Item2] == null;
-    }
-
     private Instruction[] GetMutatedInstructions()
     {
       var mutatedInstructions = new Instruction[Ushorts.Count];

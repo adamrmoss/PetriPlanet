@@ -84,7 +84,7 @@ namespace PetriPlanet.Gui
 
       this.uiTimer = new Timer {
         Enabled = true,
-        Interval = 100,
+        Interval = 250,
       };
       this.uiTimer.Tick += this.OnUiTick;
     }
