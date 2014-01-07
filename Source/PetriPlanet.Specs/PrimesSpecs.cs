@@ -33,7 +33,7 @@ namespace PetriPlanet.Specs
 
     private static ushort GetLargestPrime()
     {
-      for (var i = (ushort) (Ushorts.UshortCount - 1); i > 2; i--) {
+      for (var i = (ushort) (Ushorts.Count - 1); i > 2; i--) {
         if (Primes.LookupTable[i])
           return i;
       }

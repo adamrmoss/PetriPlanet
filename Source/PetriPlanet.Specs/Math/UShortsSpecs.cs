@@ -9,7 +9,7 @@ namespace PetriPlanet.Specs.Math
     [Test]
     public void Count_should_be_65536()
     {
-      Expect(Ushorts.UshortCount, EqualTo(65536));
+      Expect(Ushorts.Count, EqualTo(65536));
     }
 
     [Test]

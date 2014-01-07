@@ -96,7 +96,7 @@ namespace PetriPlanet.Gui
 
     public static WorldGridElement BuildOrganismElement(Organism organism)
     {
-      var intensity = (float) organism.Energy / Ushorts.UshortCount;
+      var intensity = (float) organism.Energy / Ushorts.Count;
       return new WorldGridElement {
         Type = WorldGridElementType.Organism,
         Intensity = intensity,
@@ -107,7 +107,7 @@ namespace PetriPlanet.Gui
     public static WorldGridElement BuildBiomassElement(Biomass biomass)
     {
       var type = Primes.LookupTable[biomass.Value] ? WorldGridElementType.Food : WorldGridElementType.Poison;
-      var intensity = (float) biomass.Value / Ushorts.UshortCount;
+      var intensity = (float) biomass.Value / Ushorts.Count;
 
       return new WorldGridElement {
         Type = type,

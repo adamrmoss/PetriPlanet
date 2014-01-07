@@ -37,16 +37,16 @@ namespace PetriPlanet.Core.Organisms
     private Instruction[] BuildTotalInstructions(Instruction[] instructions)
     {
       if (instructions == null)
-        return Enumerable.Range(0, Ushorts.UshortCount).Select(i => allInstructions.GetRandomElement(this.experiment.Random)).ToArray();
+        return Enumerable.Range(0, Ushorts.Count).Select(i => allInstructions.GetRandomElement(this.experiment.Random)).ToArray();
 
       if (instructions.Length == 0)
-        return GetExtraInstructions(Ushorts.UshortCount).ToArray();
+        return GetExtraInstructions(Ushorts.Count).ToArray();
 
-      if (instructions.Length > Ushorts.UshortCount)
+      if (instructions.Length > Ushorts.Count)
         throw new InvalidOperationException("instructions.Length > Ushorts.UshortCount");
 
-      var divisor = Ushorts.UshortCount / instructions.Length;
-      var remainder = Ushorts.UshortCount % instructions.Length;
+      var divisor = Ushorts.Count / instructions.Length;
+      var remainder = Ushorts.Count % instructions.Length;
 
       var repeatedInstructions = instructions.Repeat(divisor);
       var extraInstructions = GetExtraInstructions(remainder);
@@ -70,9 +70,9 @@ namespace PetriPlanet.Core.Organisms
         this.experiment.DestroyBiomass(presentBiomass);
       }
 
-      var facingPosition = this.GetFacingPosition();
-      var facedOrganism = this.experiment.Organisms[facingPosition.Item1, facingPosition.Item2];
-      var facedBiomass = this.experiment.Biomasses[facingPosition.Item1, facingPosition.Item2];
+      var facedPosition = this.GetFacedPosition();
+      var facedOrganism = this.experiment.Organisms[facedPosition.Item1, facedPosition.Item2];
+      var facedBiomass = this.experiment.Biomasses[facedPosition.Item1, facedPosition.Item2];
 
       var currentInstruction = this.Instructions[this.Ip];
 
@@ -144,8 +144,8 @@ namespace PetriPlanet.Core.Organisms
         case Instruction.Walk: {
           if (facedOrganism == null) {
             this.experiment.Organisms[this.X, this.Y] = null;
-            this.X = facingPosition.Item1;
-            this.Y = facingPosition.Item2;
+            this.X = facedPosition.Item1;
+            this.Y = facedPosition.Item2;
             this.experiment.Organisms[this.X, this.Y] = this;
           }
           break;
@@ -161,7 +161,7 @@ namespace PetriPlanet.Core.Organisms
           this.Cx = facedBiomass != null ? facedBiomass.Value : (ushort) 0;
           break;
         case Instruction.Imagine:
-          this.Ax = (ushort) this.experiment.Random.Next(Ushorts.UshortCount);
+          this.Ax = (ushort) this.experiment.Random.Next(Ushorts.Count);
           break;
       }
 
@@ -175,7 +175,7 @@ namespace PetriPlanet.Core.Organisms
 
     private void AbsorbEnergy(ushort energy)
     {
-      this.Energy = (ushort) Math.Min(this.Energy + energy, Ushorts.UshortCount - 1);
+      this.Energy = (ushort) Math.Min(this.Energy + energy, Ushorts.Count - 1);
     }
 
     private static ushort EnergyCost(Instruction instruction)
@@ -232,7 +232,7 @@ namespace PetriPlanet.Core.Organisms
 
     private ushort NextNop(ushort startingIndex)
     {
-      for (var index = startingIndex + 1; index < Ushorts.UshortCount; index++)
+      for (var index = startingIndex + 1; index < Ushorts.Count; index++)
         if (this.Instructions[index] == Instruction.Nop)
           return (ushort) index;
       for (var index = 0; index < startingIndex; index++)
@@ -241,7 +241,7 @@ namespace PetriPlanet.Core.Organisms
       return startingIndex;
     }
 
-    private Tuple<ushort, ushort> GetFacingPosition()
+    private Tuple<ushort, ushort> GetFacedPosition()
     {
       return FollowDirectionToPosition(this.X, this.Y, this.FacingDirection);
     }
@@ -276,7 +276,9 @@ namespace PetriPlanet.Core.Organisms
 
     private bool PositionIsEmpty(Tuple<ushort, ushort> position)
     {
-      return this.experiment.Organisms[position.Item1, position.Item2] == null && this.experiment.Biomasses[position.Item1, position.Item2] == null; ;
+      return this.experiment.Organisms[position.Item1, position.Item2] == null && this.experiment.Biomasses[position.Item1, position.Item2] == null;
+    }
+
     }
   }
 }

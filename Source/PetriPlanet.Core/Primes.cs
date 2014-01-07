@@ -13,8 +13,8 @@ namespace PetriPlanet.Core
 
     static Primes()
     {
-      LookupTable = new bool[Ushorts.UshortCount];
-      for (var i = 2; i < Ushorts.UshortCount; i++) {
+      LookupTable = new bool[Ushorts.Count];
+      for (var i = 2; i < Ushorts.Count; i++) {
         var factorLimit = (int) Math.Sqrt(i);
 
         var isPrime = true;

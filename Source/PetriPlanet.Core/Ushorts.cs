@@ -8,6 +8,6 @@ namespace PetriPlanet.Core
 {
   public static class Ushorts
   {
-    public const int UshortCount = 1 << (8 * sizeof(ushort));
+    public const int Count = 1 << (8 * sizeof(ushort));
   }
 }
