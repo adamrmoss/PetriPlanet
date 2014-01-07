@@ -77,5 +77,21 @@ namespace PetriPlanet.Core
           throw new InvalidOperationException(string.Format("Direction: {0} unhandled", direction));
       }
     }
+
+    public static Direction TurnAbout(this Direction direction)
+    {
+      switch (direction) {
+        case Direction.East:
+          return Direction.West;
+        case Direction.North:
+          return Direction.South;
+        case Direction.West:
+          return Direction.East;
+        case Direction.South:
+          return Direction.North;
+        default:
+          throw new InvalidOperationException(string.Format("Direction: {0} unhandled", direction));
+      }
+    }
   }
 }

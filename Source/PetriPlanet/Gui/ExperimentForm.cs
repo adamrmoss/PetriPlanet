@@ -29,6 +29,7 @@ namespace PetriPlanet.Gui
 
     private void Initialize()
     {
+      this.MaximizeBox = false;
       this.Text = "Petri Planet";
       this.BackColor = Color.LightGray;
 

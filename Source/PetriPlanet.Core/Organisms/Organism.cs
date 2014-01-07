@@ -151,9 +151,24 @@ namespace PetriPlanet.Core.Organisms
           this.Ax = this.Stack[this.Sp];
           break;
         case Instruction.Reproduce:
+          if (facedOrganism == null) {
+            var energy = Math.Max(this.Energy, this.Ax);
+            this.DeductEnergy(energy);
+
+            var mutatedInstructions = this.GetMutatedInstructions();
+            var daughter = new Organism(this.experiment, mutatedInstructions, facedPosition.Item1, facedPosition.Item2, FacingDirection, energy);
+            this.experiment.SetupOrganism(daughter);
+
+            this.FacingDirection = this.FacingDirection.TurnAbout();
+          }
           break;
         case Instruction.Excrete:
-          //throw new NotImplementedException();
+          if (facedBiomass == null) {
+            var value = Math.Max(this.Energy, this.Ax);
+            var biomass = new Biomass(facedPosition.Item1, facedPosition.Item2, value);
+            this.experiment.SetupBiomass(biomass);
+            this.DeductEnergy(value);
+          }
           break;
         case Instruction.Walk: {
           if (facedOrganism == null) {
@@ -296,6 +311,38 @@ namespace PetriPlanet.Core.Organisms
       return this.experiment.Organisms[position.Item1, position.Item2] == null && this.experiment.Biomasses[position.Item1, position.Item2] == null;
     }
 
+    private Instruction[] GetMutatedInstructions()
+    {
+      var mutatedInstructions = new Instruction[Ushorts.Count];
+      Array.Copy(this.Instructions, mutatedInstructions, Ushorts.Count);
+
+      const ushort minMutations = 1;
+      const ushort maxMutations = 100;
+
+      var numMutations = (ushort) this.experiment.Random.Next(minMutations, maxMutations);
+      for (var i = 0; i < numMutations; i++) {
+        this.SwapRandomInstructionBlocks(mutatedInstructions);
+      }
+
+      return mutatedInstructions;
+    }
+
+    private void SwapRandomInstructionBlocks(Instruction[] instructions)
+    {
+      const ushort minLength = 5;
+      const ushort maxLength = 128;
+
+      var index = (ushort) this.experiment.Random.Next(Ushorts.Count);
+      var firstBlockLength = (ushort) this.experiment.Random.Next(minLength, maxLength);
+      var firstBlock = new Instruction[firstBlockLength];
+      Arrays.WrapCopy(instructions, index, firstBlock, 0, firstBlockLength);
+
+      var secondBlockLength = (ushort) this.experiment.Random.Next(minLength, maxLength);
+      var secondBlock = new Instruction[secondBlockLength];
+      Arrays.WrapCopy(instructions, (ushort) (index + firstBlockLength), secondBlock, 0, secondBlockLength);
+
+      Arrays.WrapCopy(secondBlock, 0, instructions, index, secondBlockLength);
+      Arrays.WrapCopy(firstBlock, 0, instructions, (ushort) (index + secondBlockLength), firstBlockLength);
     }
   }
 }

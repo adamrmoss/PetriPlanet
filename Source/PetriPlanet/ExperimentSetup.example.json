@@ -16,7 +16,9 @@
       "X": 15,
       "Y": 7,
       "Direction": "West",
-      "Instructions": ["Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "TurnLeft"]
+      "Instructions": ["Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk",
+                       "Walk", "Walk", "Walk", "TurnRight",
+                       "Clear", "Swap", "Decrement", "Swap", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "Reproduce", "TurnLeft"]
     }, {
       "Type": "Organism",
       "Energy": "64000",
