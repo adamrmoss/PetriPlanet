@@ -9,7 +9,8 @@
       "X": 10,
       "Y": 8,
       "Direction": "South",
-      "Instructions": ["Walk", "Walk", "Walk", "TurnLeft", "TurnRight", "TurnLeft", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "TurnRight", "Walk", "Walk", "TurnLeft",
+      "Instructions": ["Walk", "Walk", "Walk", "TurnLeft", "Clear", "Swap", "Increment", "Increment", "Increment", "Increment", "Increment", "Swap", "Excrete",
+                       "TurnRight", "TurnRight", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "TurnRight", "Walk", "Walk", "TurnLeft",
                        "Clear", "Swap", "Decrement", "Swap", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "Reproduce"]
     }, {
       "Type": "Organism",
@@ -19,41 +20,6 @@
       "Direction": "West",
       "Instructions": ["Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "TurnRight",
                        "Clear", "Swap", "Decrement", "Swap", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "Reproduce", "TurnLeft"]
-    }, {
-      "Type": "Biomass",
-      "Value": 64000,
-      "X": 11,
-      "Y": 8
-    }, {
-      "Type": "Biomass",
-      "Value": 65521,
-      "X": 9,
-      "Y": 8
-    }, {
-      "Type": "Biomass",
-      "Value": 65521,
-      "X": 8,
-      "Y": 8
-    }, {
-      "Type": "Biomass",
-      "Value": 65521,
-      "X": 7,
-      "Y": 8
-    }, {
-      "Type": "Biomass",
-      "Value": 65521,
-      "X": 6,
-      "Y": 8
-    }, {
-      "Type": "Biomass",
-      "Value": 65521,
-      "X": 5,
-      "Y": 8
-    }, {
-      "Type": "Biomass",
-      "Value": 65535,
-      "X": 9,
-      "Y": 9
     }
   ]
 }

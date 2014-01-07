@@ -158,19 +158,25 @@ namespace PetriPlanet.Core.Organisms
             var mutatedInstructions = this.GetMutatedInstructions();
             var daughter = new Organism(this.experiment, mutatedInstructions, facedPosition.Item1, facedPosition.Item2, FacingDirection, energy);
             this.experiment.SetupOrganism(daughter);
-
-            this.FacingDirection = this.FacingDirection.TurnAbout();
           }
           break;
-        case Instruction.Excrete:
-          if (facedBiomass == null) {
-            var value = Math.Min(this.Energy, this.Ax);
-            this.DeductEnergy(value);
-
-            var biomass = new Biomass(facedPosition.Item1, facedPosition.Item2, value);
-            this.experiment.SetupBiomass(biomass);
+        case Instruction.Excrete: {
+          var currentValue = facedBiomass == null ? 0 : facedBiomass.Value;
+          if (facedBiomass != null) {
+            this.experiment.DestroyBiomass(facedBiomass);            
           }
+
+          var excretedValue = Math.Min(this.Energy, this.Ax);
+          this.DeductEnergy(excretedValue);
+
+          var newValue = (ushort) (currentValue + excretedValue);
+          if (newValue > 0) {
+            var biomass = new Biomass(facedPosition.Item1, facedPosition.Item2, newValue);
+          this.experiment.SetupBiomass(biomass);
+          }
+
           break;
+        }
         case Instruction.Walk: {
           if (facedOrganism == null) {
             this.experiment.Organisms[this.X, this.Y] = null;
