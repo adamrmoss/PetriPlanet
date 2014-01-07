@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArraysSpecs.cs" />
     <Compile Include="Bdd\BddBase.cs" />
     <Compile Include="Math\UShortsSpecs.cs" />
     <Compile Include="PrimesSpecs.cs" />

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arrays.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="Experiments\ExperimentSetup.cs" />
