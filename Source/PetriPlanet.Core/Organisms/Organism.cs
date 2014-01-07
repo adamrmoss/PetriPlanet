@@ -193,8 +193,8 @@ namespace PetriPlanet.Core.Organisms
           this.FacingDirection = this.FacingDirection.TurnRight();
           break;
         case Instruction.Sense:
-          this.Ax = facedOrganism != null ? facedOrganism.Energy : (ushort) 0;
-          this.Cx = facedBiomass != null ? facedBiomass.Value : (ushort) 0;
+          this.Ax = facedOrganism == null ? (ushort) 0 : facedOrganism.Energy;
+          this.Cx = facedBiomass == null ? (ushort) 0 : facedBiomass.Value;
           break;
         case Instruction.Imagine:
           this.Ax = (ushort) this.experiment.Random.Next(Ushorts.Count);
