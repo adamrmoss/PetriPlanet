@@ -152,7 +152,7 @@ namespace PetriPlanet.Core.Organisms
           break;
         case Instruction.Reproduce:
           if (facedOrganism == null) {
-            var energy = Math.Max(this.Energy, this.Ax);
+            var energy = Math.Min(this.Energy, this.Ax);
             this.DeductEnergy(energy);
 
             var mutatedInstructions = this.GetMutatedInstructions();
@@ -164,10 +164,11 @@ namespace PetriPlanet.Core.Organisms
           break;
         case Instruction.Excrete:
           if (facedBiomass == null) {
-            var value = Math.Max(this.Energy, this.Ax);
+            var value = Math.Min(this.Energy, this.Ax);
+            this.DeductEnergy(value);
+
             var biomass = new Biomass(facedPosition.Item1, facedPosition.Item2, value);
             this.experiment.SetupBiomass(biomass);
-            this.DeductEnergy(value);
           }
           break;
         case Instruction.Walk: {
