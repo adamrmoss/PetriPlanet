@@ -60,7 +60,7 @@ namespace PetriPlanet.Core.Organisms
 
     private static IEnumerable<Instruction> GetExtraInstructions(int extraInstructionCount)
     {
-      return Enumerable.Repeat(Instruction.Nop, extraInstructionCount);
+      return Enumerable.Repeat(Instruction.Label, extraInstructionCount);
     }
 
     public void Tick()
@@ -80,7 +80,7 @@ namespace PetriPlanet.Core.Organisms
 
       var currentInstruction = this.Instructions[this.Ip];
 
-      var energyCost = EnergyCost(currentInstruction);
+      var energyCost = currentInstruction.GetEnergyCost();
       this.DeductEnergy(energyCost);
       if (this.Energy == 0) {
         this.experiment.DestroyOrganism(this);
@@ -88,7 +88,8 @@ namespace PetriPlanet.Core.Organisms
       }
 
       switch (currentInstruction) {
-        case Instruction.Nop:
+        case Instruction.Label:
+        case Instruction.Skip:
           break;
         case Instruction.IfNot0:
           if (this.Cx == 0)
@@ -99,12 +100,24 @@ namespace PetriPlanet.Core.Organisms
             this.IncrementIp();
           break;
         case Instruction.JumpBackward: {
-          var previousNopIndex = this.PreviousNop(this.Ip);
+          var count = 1;
+          while (this.Instructions[this.Ip + 1] == Instruction.Skip) {
+            count++;
+            this.IncrementIp();
+          }
+
+          var previousNopIndex = this.PreviousLabel(this.Ip, count);
           this.Ip = previousNopIndex;
           break;
         }
         case Instruction.JumpForward: {
-          var nextNopIndex = this.NextNop(this.Ip);
+            var count = 1;
+            while (this.Instructions[this.Ip + 1] == Instruction.Skip) {
+              count++;
+              this.IncrementIp();
+            }
+
+            var nextNopIndex = this.NextLabel(this.Ip, count);
           this.Ip = nextNopIndex;
           break;
         }
@@ -214,69 +227,38 @@ namespace PetriPlanet.Core.Organisms
       this.Energy = (ushort) Math.Min(this.Energy + energy, Ushorts.Count - 1);
     }
 
-    private static ushort EnergyCost(Instruction instruction)
-    {
-      switch (instruction) {
-        case Instruction.Nop:
-        case Instruction.IfNot0:
-        case Instruction.IfNotEq:
-        case Instruction.JumpBackward:
-        case Instruction.JumpForward:
-        case Instruction.ShiftLeft:
-        case Instruction.ShiftRight:
-        case Instruction.Increment:
-        case Instruction.Decrement:
-        case Instruction.Clear:
-        case Instruction.Add:
-        case Instruction.Subtract:
-        case Instruction.Swap:
-        case Instruction.Sort:
-        case Instruction.Push:
-        case Instruction.Pop:
-        case Instruction.Peek:
-          return 1;
-        case Instruction.Reproduce:
-          return 128;
-        case Instruction.Excrete:
-          return 4;
-        case Instruction.Walk:
-          return 8;
-        case Instruction.TurnLeft:
-        case Instruction.TurnRight:
-          return 2;
-        case Instruction.Sense:
-          return 2;
-        case Instruction.Imagine:
-          return 2;
-        default:
-          throw new ArgumentException("Instruction not found: " + instruction);
-      }
-    }
-
     private void IncrementIp()
     {
       this.Ip++;
     }
 
-    private ushort PreviousNop(ushort startingIndex)
+    private ushort PreviousLabel(ushort startingIndex, int iterations)
     {
+      if (iterations == 0)
+        return startingIndex;
+
       for (var index = startingIndex - 1; index > 0; index--)
-        if (this.Instructions[index] == Instruction.Nop)
-          return (ushort) index;
+        if (this.Instructions[index] == Instruction.Label)
+          return this.PreviousLabel((ushort) index, iterations - 1);
       for (var index = startingIndex - 1; index > startingIndex; index--)
-        if (this.Instructions[index] == Instruction.Nop)
-          return (ushort) index;
+        if (this.Instructions[index] == Instruction.Label)
+          return this.PreviousLabel((ushort) index, iterations - 1);
+
       return startingIndex;
     }
 
-    private ushort NextNop(ushort startingIndex)
+    private ushort NextLabel(ushort startingIndex, int iterations)
     {
+      if (iterations == 0)
+        return startingIndex;
+
       for (var index = startingIndex + 1; index < Ushorts.Count; index++)
-        if (this.Instructions[index] == Instruction.Nop)
-          return (ushort) index;
+        if (this.Instructions[index] == Instruction.Label)
+          return this.NextLabel((ushort) index, iterations - 1);
       for (var index = 0; index < startingIndex; index++)
-        if (this.Instructions[index] == Instruction.Nop)
-          return (ushort) index;
+        if (this.Instructions[index] == Instruction.Label)
+          return this.NextLabel((ushort) index, iterations - 1);
+
       return startingIndex;
     }
 

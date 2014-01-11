@@ -1,8 +1,21 @@
 ﻿{
-  "Width": 32,
-  "Height": 24,
+  "Width": 64,
+  "Height": 48,
   "Seed": 110,
   "Elements": [
+    {
+      "Type": "Organism",
+      "Energy": "64000",
+      "X": 20,
+      "Y": 8,
+      "Direction": "East",
+      "Instructions": ["Label", "Sense", "Swap", "IfNot0", "JumpForward", "JumpForward", "Skip",
+                       "Label", "TurnRight", "TurnRight",
+                       "Label", "Sense", "Swap", "Push", "Swap", "Pop", "ShiftRight", "ShiftLeft", "IfNotEq", "Walk",
+                       "Label", "Imagine", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight",
+                                "Swap", "IfNot0", "JumpForward", "JumpForward", "Skip",
+                       "Label", "Reproduce"]
+    },
     {
       "Type": "Organism",
       "Energy": "64000",
