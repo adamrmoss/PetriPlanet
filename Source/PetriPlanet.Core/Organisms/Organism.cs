@@ -68,9 +68,9 @@ namespace PetriPlanet.Core.Organisms
       var presentBiomass = this.experiment.Biomasses[this.X, this.Y];
       if (presentBiomass != null) {
         if (presentBiomass.IsFood)
-          this.AbsorbEnergy(presentBiomass.Value);
+          this.AbsorbEnergy(presentBiomass.Energy);
         else
-          this.DeductEnergy(presentBiomass.Value);
+          this.DeductEnergy(presentBiomass.Energy);
         this.experiment.DestroyBiomass(presentBiomass);
       }
 
@@ -174,7 +174,7 @@ namespace PetriPlanet.Core.Organisms
           }
           break;
         case Instruction.Excrete: {
-          var currentValue = facedBiomass == null ? 0 : facedBiomass.Value;
+          var currentValue = facedBiomass == null ? 0 : facedBiomass.Energy;
           if (facedBiomass != null) {
             this.experiment.DestroyBiomass(facedBiomass);            
           }
@@ -207,7 +207,7 @@ namespace PetriPlanet.Core.Organisms
           break;
         case Instruction.Sense:
           this.Ax = facedOrganism == null ? (ushort) 0 : facedOrganism.Energy;
-          this.Cx = facedBiomass == null ? (ushort) 0 : facedBiomass.Value;
+          this.Cx = facedBiomass == null ? (ushort) 0 : facedBiomass.Energy;
           break;
         case Instruction.Imagine:
           this.Ax = (ushort) this.experiment.Random.Next(Ushorts.Count);

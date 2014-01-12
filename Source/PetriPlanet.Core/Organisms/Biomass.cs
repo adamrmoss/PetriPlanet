@@ -10,12 +10,11 @@ namespace PetriPlanet.Core.Organisms
   {
     public ushort X { get; private set; }
     public ushort Y { get; private set; }
-
-    public ushort Value { get; private set; }
+    public ushort Energy { get; private set; }
 
     public bool IsFood
     {
-      get { return Primes.LookupTable[this.Value]; }
+      get { return Primes.LookupTable[this.Energy]; }
     }
 
     public bool IsPoison
@@ -23,11 +22,11 @@ namespace PetriPlanet.Core.Organisms
       get { return !this.IsFood; }
     }
 
-    public Biomass(ushort x, ushort y, ushort value)
+    public Biomass(ushort x, ushort y, ushort energy)
     {
       this.X = x;
       this.Y = y;
-      this.Value = value;
+      this.Energy = energy;
     }
   }
 }

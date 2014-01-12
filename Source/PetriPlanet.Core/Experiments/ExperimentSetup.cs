@@ -12,23 +12,19 @@ namespace PetriPlanet.Core.Experiments
     public int Seed { get; set; }
     public ushort Width { get; set; }
     public ushort Height { get; set; }
-    public ExperimentSetupElement[] Elements { get; set; }
+    public ushort EnergyDensity { get; set; }
+    public ushort MinBiomassEnergy { get; set; }
+    public ushort MaxBiomassEnergy { get; set; }
+    public DateTime? StartDate { get; set; }
+    public OrganismSetup[] Organisms { get; set; }
   }
 
-  public enum ExperimentSetupElementType
+  public class OrganismSetup
   {
-    Organism,
-    Biomass,
-  }
-
-  public class ExperimentSetupElement
-  {
-    public ExperimentSetupElementType Type { get; set; }
-    public Instruction[] Instructions { get; set; }
     public ushort X { get; set; }
     public ushort Y { get; set; }
     public Direction Direction { get; set; }
-    public ushort Value { get; set; }
+    public Instruction[] Instructions { get; set; }
     public ushort Energy { get; set; }
   }
 }

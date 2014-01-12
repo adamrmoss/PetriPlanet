@@ -12,6 +12,12 @@ namespace PetriPlanet.Core.Experiments
 
     public ushort Width { get; private set; }
     public ushort Height { get; private set; }
+
+    protected ushort EnergyDensity { get; private set; }
+    public long EnergyBuffer { get; private set; }
+    public ushort MinBiomassEnergy { get; private set; }
+    public ushort MaxBiomassEnergy { get; private set; }
+
     public Biomass[,] Biomasses { get; private set; }
     public Organism[,] Organisms { get; private set; }
     public HashSet<Organism> SetOfOrganisms { get; private set; }
@@ -23,24 +29,21 @@ namespace PetriPlanet.Core.Experiments
     {
       this.Width = setup.Width;
       this.Height = setup.Height;
-      this.Random = new Random(setup.Seed);
+      this.EnergyDensity = setup.EnergyDensity;
+      this.MinBiomassEnergy = setup.MinBiomassEnergy;
+      this.MaxBiomassEnergy = setup.MaxBiomassEnergy;
 
-      this.CurrentTime = dayOne;
-      this.Biomasses = new Biomass[this.Width,this.Height];
+      this.Random = new Random(setup.Seed);
+      this.CurrentTime = setup.StartDate ?? dayOne;
+
+      this.EnergyBuffer = (long) this.EnergyDensity * this.Width * this.Height;
+      this.Biomasses = new Biomass[this.Width, this.Height];
       this.Organisms = new Organism[this.Width, this.Height];
       this.SetOfOrganisms = new HashSet<Organism>();
 
-      foreach (var experimentSetupElement in setup.Elements) {
-        switch (experimentSetupElement.Type) {
-          case ExperimentSetupElementType.Organism:
-            var organism = new Organism(this, experimentSetupElement.Instructions, experimentSetupElement.X, experimentSetupElement.Y, experimentSetupElement.Direction, experimentSetupElement.Energy);
-            this.SetupOrganism(organism);
-            break;
-          case ExperimentSetupElementType.Biomass:
-            var biomass = new Biomass(experimentSetupElement.X, experimentSetupElement.Y,experimentSetupElement.Value);
-            this.SetupBiomass(biomass);
-            break;
-        }
+      foreach (var organismSetup in setup.Organisms) {
+        var organism = new Organism(this, organismSetup.Instructions, organismSetup.X, organismSetup.Y, organismSetup.Direction, organismSetup.Energy);
+        this.SetupOrganism(organism);
       }
     }
 
@@ -81,10 +84,36 @@ namespace PetriPlanet.Core.Experiments
 
     public void Tick()
     {
+      if (this.EnergyBuffer > this.MaxBiomassEnergy) {
+        var position = this.FindRandomAvailableBiomassPosition();
+        if (position != null) {
+          var minEnergy = (ushort) Math.Min(this.EnergyBuffer, this.MinBiomassEnergy);
+          var maxEnergy = (ushort) Math.Min(this.EnergyBuffer, this.MaxBiomassEnergy);
+          var energy = (ushort) this.Random.Next(minEnergy, maxEnergy);
+          var newBiomass = new Biomass(position.Item1, position.Item2, energy);
+          this.EnergyBuffer -= energy;
+
+          this.SetupBiomass(newBiomass);
+        }
+      }
+
       foreach (var organism in this.SetOfOrganisms.ToArray()) {
         organism.Tick();
       }
       this.CurrentTime += tickIncrement;
+    }
+
+    private Tuple<ushort, ushort> FindRandomAvailableBiomassPosition()
+    {
+      const int retryCount = 64;
+      for (var i = 0; i < retryCount; i++) {
+        var x = this.Random.Next(this.Width);
+        var y = this.Random.Next(this.Height);
+
+        if (this.Biomasses[x, y] == null)
+          return Tuple.Create((ushort) x, (ushort) y);
+      }
+      return null;
     }
   }
 }

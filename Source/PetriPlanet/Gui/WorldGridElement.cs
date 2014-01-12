@@ -23,7 +23,7 @@ namespace PetriPlanet.Gui
         case WorldGridElementType.Organism:
           return Color.LightGreen;
         case WorldGridElementType.Poison:
-          return Color.Firebrick;
+          return Color.Red;
         case WorldGridElementType.Food:
           return Color.CornflowerBlue;
         default:
@@ -34,7 +34,7 @@ namespace PetriPlanet.Gui
 
   public class WorldGridElement
   {
-    public const int WorldGridScale = 16;
+    public const int WorldGridScale = 24;
 
     public WorldGridElementType Type { get; private set; }
     public float Intensity { get; private set; }
@@ -107,7 +107,7 @@ namespace PetriPlanet.Gui
     public static WorldGridElement BuildBiomassElement(Biomass biomass)
     {
       var type = biomass.IsFood ? WorldGridElementType.Food : WorldGridElementType.Poison;
-      var intensity = ((2f * biomass.Value / Ushorts.Count) + .5f) / 3f;
+      var intensity = ((2f * biomass.Energy / Ushorts.Count) + .5f) / 3f;
 
       return new WorldGridElement {
         Type = type,
