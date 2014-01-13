@@ -1,75 +1,18 @@
 ﻿{
   "Width": 32,
   "Height": 24,
-  "EnergyDensity": 1024,
+  "EnergyDensity": 16,
   "MinBiomassEnergy": 1024,
   "MaxBiomassEnergy": 8192,
   "BiomassRegenRate": 8,
-  "PoisonEfficacy": .1,
-  "Seed": 232,
+  "PoisonEfficacy": .11,
+  "Seed": 108,
   "Organisms": [
-    {
-      "Energy": "65535",
-      "X": 20,
-      "Y": 8,
-      "Direction": "East",
-      "Instructions": ["Label", "Sense", "Swap", "IfNot0", "JumpForward", "JumpForward", "Skip",
-                       "Label", "TurnRight", "TurnRight",
-                       "Label", "Sense", "Swap", "Push", "Swap", "Pop", "ShiftRight", "ShiftLeft", "IfNotEq", "Walk",
-                       "Label", "Imagine", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight",
-                                "Swap", "IfNot0", "JumpForward", "JumpForward", "Skip",
-                       "Label", "Reproduce"]
-    },
-    {
-      "Energy": "65535",
-      "X": 19,
-      "Y": 8,
-      "Direction": "North",
-      "Instructions": ["Label", "Sense", "Swap", "IfNot0", "JumpForward", "JumpForward", "Skip",
-                       "Label", "TurnRight", "TurnRight",
-                       "Label", "Sense", "Swap", "Push", "Swap", "Pop", "ShiftRight", "ShiftLeft", "IfNotEq", "Walk",
-                       "Label", "Imagine", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight",
-                                "Swap", "IfNot0", "JumpForward", "JumpForward", "Skip",
-                       "Label", "Reproduce"]
-    },
-    {
-      "Energy": "65535",
-      "X": 18,
-      "Y": 8,
-      "Direction": "West",
-      "Instructions": ["Label", "Sense", "Swap", "IfNot0", "JumpForward", "JumpForward", "Skip",
-                       "Label", "TurnRight", "TurnRight",
-                       "Label", "Sense", "Swap", "Push", "Swap", "Pop", "ShiftRight", "ShiftLeft", "IfNotEq", "Walk",
-                       "Label", "Imagine", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight",
-                                "Swap", "IfNot0", "JumpForward", "JumpForward", "Skip",
-                       "Label", "Reproduce"]
-    },
-    {
-      "Energy": "65535",
-      "X": 20,
-      "Y": 4,
-      "Direction": "East",
-      "Instructions": ["Label", "Sense", "Swap", "IfNot0", "JumpForward", "JumpForward", "Skip",
-                       "Label", "TurnRight", "TurnRight",
-                       "Label", "Sense", "Swap", "Push", "Swap", "Pop", "ShiftRight", "ShiftLeft", "IfNotEq", "Walk",
-                       "Label", "Imagine", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight",
-                                "Swap", "IfNot0", "JumpForward", "JumpForward", "Skip",
-                       "Label", "Reproduce"]
-    },
     {
       "Energy": "65535",
       "X": 10,
       "Y": 8,
       "Direction": "South",
-      "Instructions": ["Walk", "Walk", "Walk", "TurnLeft", "Clear", "Swap", "Increment", "Increment", "Increment", "Increment", "Increment", "Swap", "Excrete",
-                       "TurnRight", "TurnRight", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "TurnRight", "Walk", "Walk", "TurnLeft",
-                       "Clear", "Swap", "Decrement", "Swap", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "Reproduce"]
-    },
-    {
-      "Energy": "65535",
-      "X": 1,
-      "Y": 3,
-      "Direction": "North",
       "Instructions": ["Walk", "Walk", "Walk", "TurnLeft", "Clear", "Swap", "Increment", "Increment", "Increment", "Increment", "Increment", "Swap", "Excrete",
                        "TurnRight", "TurnRight", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "TurnRight", "Walk", "Walk", "TurnLeft",
                        "Clear", "Swap", "Decrement", "Swap", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "Reproduce"]
