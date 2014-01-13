@@ -4,6 +4,8 @@
   "EnergyDensity": 1024,
   "MinBiomassEnergy": 1024,
   "MaxBiomassEnergy": 8192,
+  "BiomassRegenRate": 8,
+  "PoisonEfficacy": .1,
   "Seed": 232,
   "Organisms": [
     {

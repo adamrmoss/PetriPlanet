@@ -12,6 +12,13 @@ namespace PetriPlanet.Core.Organisms
     public ushort Y { get; private set; }
     public ushort Energy { get; private set; }
 
+    public bool AbsorbEnergy(ushort energy)
+    {
+      var oldEnergyLevel = this.Energy;
+      this.Energy += energy;
+      return this.Energy < oldEnergyLevel;
+    }
+
     public bool IsFood
     {
       get { return Primes.LookupTable[this.Energy]; }

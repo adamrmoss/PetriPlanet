@@ -40,5 +40,14 @@ namespace PetriPlanet.Specs
 
       return 0;
     }
+
+    [Test]
+    public void Probability_of_primes()
+    {
+      var primeCount = Primes.LookupTable.Where(b => b).Count();
+      var primeProbability = (double) primeCount / Ushorts.Count;
+
+      Expect(primeProbability, InRange(.0998, .0999));
+    }
   }
 }

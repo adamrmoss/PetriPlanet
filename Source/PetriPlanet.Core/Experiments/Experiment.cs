@@ -17,6 +17,8 @@ namespace PetriPlanet.Core.Experiments
     public long EnergyBuffer { get; private set; }
     public ushort MinBiomassEnergy { get; private set; }
     public ushort MaxBiomassEnergy { get; private set; }
+    protected ushort BiomassRegenRate { get; set; }
+    protected float PoisonEfficacy { get; set; }
 
     public Biomass[,] Biomasses { get; private set; }
     public Organism[,] Organisms { get; private set; }
@@ -32,6 +34,8 @@ namespace PetriPlanet.Core.Experiments
       this.EnergyDensity = setup.EnergyDensity;
       this.MinBiomassEnergy = setup.MinBiomassEnergy;
       this.MaxBiomassEnergy = setup.MaxBiomassEnergy;
+      this.BiomassRegenRate = setup.BiomassRegenRate;
+      this.PoisonEfficacy = setup.PoisonEfficacy;
 
       this.Random = new Random(setup.Seed);
       this.CurrentTime = setup.StartDate ?? dayOne;
@@ -50,11 +54,11 @@ namespace PetriPlanet.Core.Experiments
     public void SetupOrganism(Organism organism)
     {
       if (this.SetOfOrganisms.Contains(organism))
-        throw new InvalidOperationException(string.Format("Organism already placed: {0}", organism));
+        throw new InvalidOperationException(String.Format("Organism already placed: {0}", organism));
 
       var currentOccupant = this.Organisms[organism.X, organism.Y];
       if (currentOccupant != null)
-        throw new InvalidOperationException(string.Format("Position {0}, {1} already contains {2}", organism.X, organism.Y, currentOccupant));
+        throw new InvalidOperationException(String.Format("Position {0}, {1} already contains {2}", organism.X, organism.Y, currentOccupant));
 
       this.Organisms[organism.X, organism.Y] = organism;
       this.SetOfOrganisms.Add(organism);
@@ -63,13 +67,10 @@ namespace PetriPlanet.Core.Experiments
     public void DestroyOrganism(Organism organism)
     {
       if (!this.SetOfOrganisms.Contains(organism))
-        throw new InvalidOperationException(string.Format("Organism not placed: {0}", organism));
-      this.SetOfOrganisms.Remove(organism);
+        throw new InvalidOperationException(String.Format("Organism not placed: {0}", organism));
 
+      this.SetOfOrganisms.Remove(organism);
       this.Organisms[organism.X, organism.Y] = null;
-      var value = (ushort) (this.Random.NextDouble() * this.Random.Next(Ushorts.Count));
-      var corpse = new Biomass(organism.X, organism.Y, value);
-      this.SetupBiomass(corpse);
     }
 
     public void SetupBiomass(Biomass biomass)
@@ -84,6 +85,15 @@ namespace PetriPlanet.Core.Experiments
 
     public void Tick()
     {
+      for (var i = 0; i < this.BiomassRegenRate; i++) {
+        this.RegenerateBiomass();
+      }
+      this.ProcessOrganisms();
+      this.CurrentTime += tickIncrement;
+    }
+
+    private void RegenerateBiomass()
+    {
       if (this.EnergyBuffer > this.MaxBiomassEnergy) {
         var position = this.FindRandomAvailableBiomassPosition();
         if (position != null) {
@@ -96,11 +106,36 @@ namespace PetriPlanet.Core.Experiments
           this.SetupBiomass(newBiomass);
         }
       }
+    }
 
+    private void ProcessOrganisms()
+    {
       foreach (var organism in this.SetOfOrganisms.ToArray()) {
-        organism.Tick();
+        this.ProcessOrganism(organism);
       }
-      this.CurrentTime += tickIncrement;
+    }
+
+    private void ProcessOrganism(Organism organism)
+    {
+      var presentBiomass = this.Biomasses[organism.X, organism.Y];
+      if (presentBiomass != null) {
+        if (presentBiomass.IsFood) {
+          organism.AbsorbEnergy(presentBiomass.Energy);
+        } else {
+          var energyToDeduct = (ushort) (presentBiomass.Energy * this.PoisonEfficacy);
+          organism.DeductEnergy(energyToDeduct);
+          this.EnergyBuffer += presentBiomass.Energy * 2;
+        }
+        this.DestroyBiomass(presentBiomass);
+      }
+
+      var energyCost = organism.Tick();
+      organism.DeductEnergy(energyCost);
+      this.EnergyBuffer += energyCost;
+
+      if (organism.Energy == 0) {
+        this.DestroyOrganism(organism);
+      }
     }
 
     private Tuple<ushort, ushort> FindRandomAvailableBiomassPosition()
@@ -114,6 +149,79 @@ namespace PetriPlanet.Core.Experiments
           return Tuple.Create((ushort) x, (ushort) y);
       }
       return null;
+    }
+
+    private Tuple<ushort, ushort> FollowDirectionToPosition(ushort x, ushort y, Direction? direction)
+    {
+      if (direction == null)
+        return null;
+
+      var newX = (ushort) ((x + direction.Value.GetDeltaX() + this.Width) % this.Width);
+      var newY = (ushort) ((y + direction.Value.GetDeltaY() + this.Height) % this.Height);
+      return Tuple.Create(newX, newY);
+    }
+
+    public void Excrete(Organism organism, ushort excretedValue)
+    {
+      var facedPosition = this.FollowDirectionToPosition(organism.X, organism.Y, organism.FacingDirection);
+      var facedBiomass = this.Biomasses[facedPosition.Item1, facedPosition.Item2];
+
+      var currentValue = facedBiomass == null ? 0 : facedBiomass.Energy;
+      if (facedBiomass != null) {
+        this.DestroyBiomass(facedBiomass);
+      }
+
+      organism.DeductEnergy(excretedValue);
+
+      var newValue = (ushort) (currentValue + excretedValue);
+      if (newValue > 0) {
+        var biomass = new Biomass(facedPosition.Item1, facedPosition.Item2, newValue);
+        this.SetupBiomass(biomass);
+      }
+    }
+
+    public void Reproduce(Organism organism)
+    {
+      var facedPosition = this.FollowDirectionToPosition(organism.X, organism.Y, organism.FacingDirection);
+      var facedOrganism = this.Organisms[facedPosition.Item1, facedPosition.Item2];
+
+      if (facedOrganism == null) {
+        var energy = Math.Min(organism.Energy, organism.Ax);
+        organism.DeductEnergy(energy);
+
+        var mutatedInstructions = organism.GetMutatedInstructions();
+        var daughter = new Organism(this, mutatedInstructions, facedPosition.Item1, facedPosition.Item2, organism.FacingDirection, energy);
+        this.SetupOrganism(daughter);
+      }
+    }
+
+    public void Walk(Organism organism)
+    {
+      var facedPosition = this.FollowDirectionToPosition(organism.X, organism.Y, organism.FacingDirection);
+      var facedOrganism = this.Organisms[facedPosition.Item1, facedPosition.Item2];
+
+      if (facedOrganism == null) {
+        this.Organisms[organism.X, organism.Y] = null;
+        organism.X = facedPosition.Item1;
+        organism.Y = facedPosition.Item2;
+        this.Organisms[organism.X, organism.Y] = organism;
+      }
+    }
+
+    public ushort GetEnergyOfFacedBiomass(Organism organism)
+    {
+      var facedPosition = this.FollowDirectionToPosition(organism.X, organism.Y, organism.FacingDirection);
+      var facedBiomass = this.Biomasses[facedPosition.Item1, facedPosition.Item2];
+
+      return facedBiomass == null ? (ushort) 0 : facedBiomass.Energy;
+    }
+
+    public ushort GetEnergyOfFacedOrganism(Organism organism)
+    {
+      var facedPosition = this.FollowDirectionToPosition(organism.X, organism.Y, organism.FacingDirection);
+      var facedOrganism = this.Organisms[facedPosition.Item1, facedPosition.Item2];
+
+      return facedOrganism == null ? (ushort) 0 : facedOrganism.Energy;
     }
   }
 }
