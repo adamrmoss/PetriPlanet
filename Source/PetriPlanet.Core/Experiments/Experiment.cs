@@ -27,6 +27,13 @@ namespace PetriPlanet.Core.Experiments
     public DateTime CurrentTime { get; private set; }
     public Random Random { get; private set; }
 
+    public event Action<ushort, ushort> OnExperimentUpdated;
+    private void PublishOnExperimentUpdated(ushort x, ushort y)
+    {
+      if (this.OnExperimentUpdated != null)
+        this.OnExperimentUpdated(x, y);
+    }
+
     public Experiment(ExperimentSetup setup)
     {
       this.Width = setup.Width;
@@ -62,6 +69,7 @@ namespace PetriPlanet.Core.Experiments
 
       this.Organisms[organism.X, organism.Y] = organism;
       this.SetOfOrganisms.Add(organism);
+      this.PublishOnExperimentUpdated(organism.X, organism.Y);
     }
 
     public void DestroyOrganism(Organism organism)
@@ -71,16 +79,19 @@ namespace PetriPlanet.Core.Experiments
 
       this.SetOfOrganisms.Remove(organism);
       this.Organisms[organism.X, organism.Y] = null;
+      this.PublishOnExperimentUpdated(organism.X, organism.Y);
     }
 
     public void SetupBiomass(Biomass biomass)
     {
       this.Biomasses[biomass.X, biomass.Y] = biomass;
+      this.PublishOnExperimentUpdated(biomass.X, biomass.Y);
     }
 
     public void DestroyBiomass(Biomass biomass)
     {
       this.Biomasses[biomass.X, biomass.Y] = null;
+      this.PublishOnExperimentUpdated(biomass.X, biomass.Y);
     }
 
     public void Tick()
@@ -111,7 +122,11 @@ namespace PetriPlanet.Core.Experiments
     private void ProcessOrganisms()
     {
       foreach (var organism in this.SetOfOrganisms.ToArray()) {
+        var oldX = organism.X;
+        var oldY = organism.Y;
         this.ProcessOrganism(organism);
+        this.PublishOnExperimentUpdated(oldX, oldY);
+        this.PublishOnExperimentUpdated(organism.X, organism.Y);
       }
     }
 

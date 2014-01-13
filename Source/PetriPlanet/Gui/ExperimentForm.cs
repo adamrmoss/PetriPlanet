@@ -82,11 +82,11 @@ namespace PetriPlanet.Gui
       };
       this.simulationTimer.Tick += this.OnSimulationTick;
 
-      this.uiTimer = new Timer {
+      var slowUiTimer = new Timer {
         Enabled = true,
-        Interval = 250,
+        Interval = 1000,
       };
-      this.uiTimer.Tick += this.OnUiTick;
+      slowUiTimer.Tick += this.OnSlowUiTick;
     }
 
     private void OnSimulationTick(object sender, EventArgs eventArgs)
@@ -97,9 +97,8 @@ namespace PetriPlanet.Gui
       this.simulationTimer.Interval = trackBarValue == maxSpeed ? 1 : 1000 / trackBarValue;
     }
 
-    private void OnUiTick(object sender, EventArgs eventArgs)
+    private void OnSlowUiTick(object sender, EventArgs eventArgs)
     {
-      this.clockLabel.Refresh();
       this.worldView.Refresh();
     }
   }

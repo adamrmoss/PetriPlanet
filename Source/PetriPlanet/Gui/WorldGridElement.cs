@@ -34,7 +34,7 @@ namespace PetriPlanet.Gui
 
   public class WorldGridElement
   {
-    public const int WorldGridScale = 24;
+    public const int WorldGridScale = 32;
 
     public WorldGridElementType Type { get; private set; }
     public float Intensity { get; private set; }
@@ -129,16 +129,23 @@ namespace PetriPlanet.Gui
       var height = organisms.GetLength(1);
       var elements = new WorldGridElement[width, height];
 
-      for (var i = 0; i < width; i++) {
-        for (var j = 0; j < height; j++) {
-          var organism = organisms[i, j];
-          var biomass = biomasses[i, j];
-          elements[i, j] = organism != null ? BuildOrganismElement(organism) :
-                           biomass != null ? BuildBiomassElement(biomass) : BuildEmpty();
+      for (var x = 0; x < width; x++) {
+        for (var y = 0; y < height; y++) {
+          var organism = organisms[x, y];
+          var biomass = biomasses[x, y];
+          var worldGridElement = GetWorldGridElement(organism, biomass);
+          elements[x, y] = worldGridElement;
         }
       }
 
       return elements;
+    }
+
+    public static WorldGridElement GetWorldGridElement(Organism organism, Biomass biomass)
+    {
+      var worldGridElement = organism != null ? BuildOrganismElement(organism) :
+                             biomass != null ? BuildBiomassElement(biomass) : BuildEmpty();
+      return worldGridElement;
     }
   }
 }
