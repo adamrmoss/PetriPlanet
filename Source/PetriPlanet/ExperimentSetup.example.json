@@ -5,7 +5,7 @@
   "MinBiomassEnergy": 1024,
   "MaxBiomassEnergy": 8192,
   "BiomassRegenRate": 8,
-  "PoisonEfficacy": .11,
+  "PoisonEfficacy": .118,
   "Seed": 108,
   "Organisms": [
     {
@@ -17,12 +17,18 @@
                        "TurnRight", "TurnRight", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "TurnRight", "Walk", "Walk", "TurnLeft",
                        "Clear", "Swap", "Decrement", "Swap", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "Reproduce"]
     }, {
-      "Energy": "65535",
-      "X": 15,
-      "Y": 7,
+      "Energy": "32768",
+      "X": 14,
+      "Y": 10,
       "Direction": "West",
       "Instructions": ["Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "TurnRight",
                        "Clear", "Swap", "Decrement", "Swap", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "Reproduce", "TurnLeft"]
+    }, {
+      "Energy": "32768",
+      "X": 15,
+      "Y": 10,
+      "Direction": "East",
+      "Instructions": ["Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Reproduce"]
     }
   ]
 }
