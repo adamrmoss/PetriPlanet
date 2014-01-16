@@ -23,9 +23,9 @@ namespace PetriPlanet
         Filter = "Experiment files (*.experiment)|*.experiment",
         RestoreDirectory = false,
       };
-
       var dialogResult = openFileDialog.ShowDialog();
       var experimentFilePath = openFileDialog.FileName;
+
       var json = File.ReadAllText(experimentFilePath);
       var experimentSetup = JsonConvert.DeserializeObject<ExperimentSetup>(json);
       var experiment = new Experiment(experimentSetup);
