@@ -62,10 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="ExperimentSetup.json">
+    <None Include="example.experiment">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="ExperimentSetup.example.json" />
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
