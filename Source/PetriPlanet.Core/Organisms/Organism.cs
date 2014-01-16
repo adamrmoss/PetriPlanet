@@ -10,32 +10,34 @@ namespace PetriPlanet.Core.Organisms
   {
     private static readonly Instruction[] allInstructions = EnumerableExtensions.GetAllEnumValues<Instruction>();
 
-    private readonly Experiment experiment;
+    public Guid Id { get; private set; }
+    public ushort X { get; set; }
+    public ushort Y { get; set; }
+    public Direction FacingDirection { get; private set; }
+    public ushort Energy { get; private set; }
 
     public Instruction[] Instructions { get; private set; }
     public ushort[] Stack { get; private set; }
-
-    public Direction FacingDirection { get; private set; }
-    public ushort X { get; set; }
-    public ushort Y { get; set; }
-    public ushort Energy { get; private set; }
 
     public ushort Ax { get; private set; }
     public ushort Cx { get; private set; }
     public ushort Ip { get; private set; }
     public ushort Sp { get; private set; }
 
-    public Organism(Experiment experiment, Instruction[] instructions, ushort x, ushort y, Direction facingDirection, ushort energy)
+    private readonly Experiment experiment;
+
+    public Organism(Guid id, ushort x, ushort y, Direction facingDirection, ushort energy, Instruction[] instructions, Experiment experiment)
     {
-      this.experiment = experiment;
-
-      this.Instructions = BuildTotalInstructions(instructions);
-      this.Stack = new ushort[Ushorts.Count];
-
+      this.Id = id;
       this.X = x;
       this.Y = y;
       this.FacingDirection = facingDirection;
       this.Energy = energy;
+
+      this.Instructions = BuildTotalInstructions(instructions);
+      this.Stack = new ushort[Ushorts.Count];
+
+      this.experiment = experiment;
     }
 
     private Instruction[] BuildTotalInstructions(Instruction[] instructions)

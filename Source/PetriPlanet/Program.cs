@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using PetriPlanet.Core;
 using PetriPlanet.Core.Experiments;
+using PetriPlanet.Core.Organisms;
 using PetriPlanet.Gui;
 
 namespace PetriPlanet
@@ -25,15 +27,29 @@ namespace PetriPlanet
       };
       var dialogResult = openFileDialog.ShowDialog();
       var experimentFilePath = openFileDialog.FileName;
+      var experimentDirectory = Path.GetDirectoryName(experimentFilePath);
+      if (experimentDirectory == null)
+        throw new InvalidOperationException("experimentDirectory was null!!!");
 
       var json = File.ReadAllText(experimentFilePath);
       var experimentSetup = JsonConvert.DeserializeObject<ExperimentSetup>(json);
       var experiment = new Experiment(experimentSetup);
 
+      var organismFilenames = Directory.EnumerateFiles(experimentDirectory, "*.organism").ToArray();
+      var organisms = organismFilenames.Select(s => LoadOrganism(s, experiment));
+      experiment.SetupOrganisms(organisms);
+
       var experimentForm = new ExperimentForm(experiment);
       experimentForm.Show();
       experimentForm.Focus();
       Application.Run(experimentForm);
+    }
+
+    private static Organism LoadOrganism(string organismFilename, Experiment experiment)
+    {
+      var json = File.ReadAllText(organismFilename);
+      var organismSetup = JsonConvert.DeserializeObject<OrganismSetup>(json);
+      return new Organism(organismSetup.Id, organismSetup.X, organismSetup.Y, organismSetup.Direction, organismSetup.Energy, organismSetup.Instructions, experiment);
     }
   }
 }

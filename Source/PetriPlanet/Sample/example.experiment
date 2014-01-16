@@ -1,0 +1,10 @@
+﻿{
+  "Width": 32,
+  "Height": 24,
+  "EnergyDensity": 16,
+  "MinBiomassEnergy": 1024,
+  "MaxBiomassEnergy": 8192,
+  "BiomassRegenRate": 8,
+  "PoisonEfficacy": .118,
+  "Seed": 108
+}

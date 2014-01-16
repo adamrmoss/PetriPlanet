@@ -49,6 +49,7 @@
     <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="Experiments\ExperimentSetup.cs" />
+    <Compile Include="Organisms\OrganismSetup.cs" />
     <Compile Include="Organisms\Biomass.cs" />
     <Compile Include="Organisms\Instruction.cs" />
     <Compile Include="Organisms\Organism.cs" />

@@ -1,0 +1,10 @@
+﻿{
+  "Id": "b97a65b8-9102-4e4c-ba19-2bd1aaa58610",
+  "Energy": "65535",
+  "X": 10,
+  "Y": 8,
+  "Direction": "South",
+  "Instructions": ["Walk", "Walk", "Walk", "TurnLeft", "Clear", "Swap", "Increment", "Increment", "Increment", "Increment", "Increment", "Swap", "Excrete",
+                   "TurnRight", "TurnRight", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "TurnRight", "Walk", "Walk", "TurnLeft",
+                   "Clear", "Swap", "Decrement", "Swap", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "Reproduce"]
+}

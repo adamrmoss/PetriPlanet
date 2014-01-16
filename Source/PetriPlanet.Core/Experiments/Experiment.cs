@@ -13,12 +13,12 @@ namespace PetriPlanet.Core.Experiments
     public ushort Width { get; private set; }
     public ushort Height { get; private set; }
 
-    protected ushort EnergyDensity { get; private set; }
+    public ushort EnergyDensity { get; private set; }
     public long EnergyBuffer { get; private set; }
     public ushort MinBiomassEnergy { get; private set; }
     public ushort MaxBiomassEnergy { get; private set; }
-    protected ushort BiomassRegenRate { get; set; }
-    protected float PoisonEfficacy { get; set; }
+    public ushort BiomassRegenRate { get; set; }
+    public float PoisonEfficacy { get; set; }
 
     public Biomass[,] Biomasses { get; private set; }
     public Organism[,] Organisms { get; private set; }
@@ -51,9 +51,11 @@ namespace PetriPlanet.Core.Experiments
       this.Biomasses = new Biomass[this.Width, this.Height];
       this.Organisms = new Organism[this.Width, this.Height];
       this.SetOfOrganisms = new HashSet<Organism>();
+    }
 
-      foreach (var organismSetup in setup.Organisms) {
-        var organism = new Organism(this, organismSetup.Instructions, organismSetup.X, organismSetup.Y, organismSetup.Direction, organismSetup.Energy);
+    public void SetupOrganisms(IEnumerable<Organism> organisms)
+    {
+      foreach (var organism in organisms) {
         this.SetupOrganism(organism);
       }
     }
@@ -205,7 +207,7 @@ namespace PetriPlanet.Core.Experiments
         organism.DeductEnergy(energy);
 
         var mutatedInstructions = organism.GetMutatedInstructions();
-        var daughter = new Organism(this, mutatedInstructions, facedPosition.Item1, facedPosition.Item2, organism.FacingDirection, energy);
+        var daughter = new Organism(Guid.NewGuid(), facedPosition.Item1, facedPosition.Item2, organism.FacingDirection, energy, mutatedInstructions, this);
         this.SetupOrganism(daughter);
       }
     }

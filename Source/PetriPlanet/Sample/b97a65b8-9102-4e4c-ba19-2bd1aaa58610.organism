@@ -1,0 +1,8 @@
+﻿{
+  "Id": "87a29095-5a26-45ad-b514-b9079c31cd42",
+  "Energy": "32768",
+  "X": 15,
+  "Y": 10,
+  "Direction": "East",
+  "Instructions": ["Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Walk", "TurnRight", "Walk", "TurnLeft", "Reproduce"]
+}
