@@ -18,6 +18,11 @@ namespace PetriPlanet.Core.Experiments
     public ushort MinBiomassEnergy { get; private set; }
     public ushort MaxBiomassEnergy { get; private set; }
     public ushort BiomassRegenRate { get; set; }
+
+    public ushort MinimumPopulation { get; set; }
+    public ushort MaximumPopulation { get; set; }
+    public float MinimumEnvironmentalPressure { get; set; }
+    public float MaximumEnvironmentalPressure { get; set; }
     public float EnvironmentalPressure { get; set; }
 
     public Biomass[,] Biomasses { get; private set; }
@@ -31,6 +36,9 @@ namespace PetriPlanet.Core.Experiments
 
     public ushort GetGenerations()
     {
+      if (!this.SetOfOrganisms.Any())
+        return 0;
+
       return this.SetOfOrganisms.Max(organism => organism.Generation);
     }
 
@@ -59,7 +67,11 @@ namespace PetriPlanet.Core.Experiments
       this.MinBiomassEnergy = setup.MinBiomassEnergy;
       this.MaxBiomassEnergy = setup.MaxBiomassEnergy;
       this.BiomassRegenRate = setup.BiomassRegenRate;
-      this.EnvironmentalPressure = setup.EnvironmentalPressure;
+
+      this.MinimumPopulation = setup.MinimumPopulation;
+      this.MaximumPopulation = setup.MaximumPopulation;
+      this.MinimumEnvironmentalPressure = setup.MinimumEnvironmentalPressure;
+      this.MaximumEnvironmentalPressure = setup.MaximumEnvironmentalPressure;
 
       this.Random = new Random(setup.Seed);
       this.CurrentTime = setup.StartDate ?? dayOne;
@@ -68,6 +80,24 @@ namespace PetriPlanet.Core.Experiments
       this.Biomasses = new Biomass[this.Width, this.Height];
       this.Organisms = new Organism[this.Width, this.Height];
       this.SetOfOrganisms = new HashSet<Organism>();
+
+      this.EnvironmentalPressure = this.ComputeEnvironmentalPressure();
+    }
+
+    private float ComputeEnvironmentalPressure()
+    {
+      if (this.Population < this.MinimumPopulation)
+        return this.MinimumEnvironmentalPressure;
+
+      if (this.Population > this.MaximumPopulation)
+        return this.MaximumEnvironmentalPressure;
+
+      var populationRange = this.MaximumPopulation - this.MinimumPopulation;
+      var pressureRange = this.MaximumEnvironmentalPressure - this.MinimumEnvironmentalPressure;
+
+      var populationRatio = ((float) this.Population - this.MinimumPopulation) / populationRange;
+      var environmentalPressure = (populationRatio * pressureRange) + this.MinimumEnvironmentalPressure;
+      return environmentalPressure;
     }
 
     public void SetupOrganisms(IEnumerable<Organism> organisms)
@@ -88,6 +118,7 @@ namespace PetriPlanet.Core.Experiments
 
       this.Organisms[organism.X, organism.Y] = organism;
       this.SetOfOrganisms.Add(organism);
+      this.EnvironmentalPressure = this.ComputeEnvironmentalPressure();
       this.PublishExperimentUpdated(organism.X, organism.Y);
     }
 
@@ -98,6 +129,7 @@ namespace PetriPlanet.Core.Experiments
 
       this.SetOfOrganisms.Remove(organism);
       this.Organisms[organism.X, organism.Y] = null;
+      this.EnvironmentalPressure = this.ComputeEnvironmentalPressure();
       this.PublishExperimentUpdated(organism.X, organism.Y);
       this.CheckForExtinction();
     }

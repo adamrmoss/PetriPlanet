@@ -70,14 +70,14 @@ namespace PetriPlanet.Core.Organisms
         case Instruction.Imagine:
           return 2;
         case Instruction.Reproduce:
-          return 128;
+          return 256;
         case Instruction.Excrete:
           return 4;
         case Instruction.Walk:
-          return 8;
+          return 16;
         case Instruction.TurnLeft:
         case Instruction.TurnRight:
-          return 2;
+          return 8;
         default:
           throw new ArgumentException("Instruction not found: " + instruction);
       }

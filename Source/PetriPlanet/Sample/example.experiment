@@ -1,10 +1,13 @@
 ﻿{
+  "Seed": 108,
   "Width": 32,
   "Height": 24,
-  "EnergyDensity": 16,
+  "EnergyDensity": 4096,
   "MinBiomassEnergy": 1024,
   "MaxBiomassEnergy": 8192,
   "BiomassRegenRate": 8,
-  "EnvironmentalPressure": .118,
-  "Seed": 108
+  "MinimumPopulation": 10,
+  "MaximumPopulation": 75,
+  "MinimumEnvironmentalPressure": .05,
+  "MaximumEnvironmentalPressure": .4
 }

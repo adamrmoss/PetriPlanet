@@ -34,7 +34,7 @@ namespace PetriPlanet.Gui
 
   public class WorldGridElement
   {
-    public const int WorldGridScale = 28;
+    public const int WorldGridScale = 16;
 
     public WorldGridElementType Type { get; private set; }
     public float Intensity { get; private set; }

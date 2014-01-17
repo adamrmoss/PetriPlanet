@@ -62,13 +62,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Sample\b97a65b8-9102-4e4c-ba19-2bd1aaa58610.organism">
+    <None Include="Sample\87a29095-5a26-45ad-b514-b9079c31cd42.organism">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sample\b137d493-23cd-4e3a-b1d3-03c8a3d2c982.organism">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Sample\87a29095-5a26-45ad-b514-b9079c31cd42.organism">
+    <None Include="Sample\b97a65b8-9102-4e4c-ba19-2bd1aaa58610.organism">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sample\example.experiment">

@@ -55,7 +55,7 @@ namespace PetriPlanet.Gui
       this.verticalLayout.Controls.Add(headerLayout);
 
       this.environmentalPressureLabel = new Label {
-        Text = string.Format("Environmental Pressure: {0}", this.experiment.EnvironmentalPressure),
+        Text = FormatEnvironmentalPressure(this.experiment.EnvironmentalPressure),
         ForeColor = Color.LightGray,
         AutoSize = true,
         // Hackish
@@ -64,7 +64,7 @@ namespace PetriPlanet.Gui
       this.verticalLayout.Controls.Add(this.environmentalPressureLabel);
 
       this.populationLabel = new Label {
-        Text = string.Format("Population: {0}", this.experiment.Population),
+        Text = FormatPopulation(this.experiment.Population),
         ForeColor = Color.LightGray,
         AutoSize = true,
         // Hackish
@@ -73,7 +73,7 @@ namespace PetriPlanet.Gui
       this.verticalLayout.Controls.Add(this.populationLabel);
 
       this.generationsLabel = new Label {
-        Text = string.Format("Generations: {0}", this.experiment.GetGenerations()),
+        Text = FormatGenerations(this.experiment.GetGenerations()),
         ForeColor = Color.LightGray,
         AutoSize = true,
         // Hackish
@@ -123,13 +123,28 @@ namespace PetriPlanet.Gui
     private void OnSimulationTick(object sender, EventArgs eventArgs)
     {
       this.experiment.Tick();
-      this.environmentalPressureLabel.Text = string.Format("Environmental Pressure: {0}", this.experiment.EnvironmentalPressure);
-      this.populationLabel.Text = string.Format("Population: {0}", this.experiment.Population);
-      this.generationsLabel.Text = string.Format("Generations: {0}", this.experiment.GetGenerations());
+      this.environmentalPressureLabel.Text = FormatEnvironmentalPressure(this.experiment.EnvironmentalPressure);
+      this.populationLabel.Text = FormatPopulation(this.experiment.Population);
+      this.generationsLabel.Text = FormatGenerations(this.experiment.GetGenerations());
       this.clockLabel.Text = this.experiment.CurrentTime.ToString(westernFormatString);
 
       var trackBarValue = this.trackBar.Value;
       this.simulationTimer.Interval = trackBarValue == maxSpeed ? 1 : 500 / trackBarValue;
+    }
+
+    private static string FormatEnvironmentalPressure(float environmentalPressure)
+    {
+      return string.Format("Environmental Pressure: {0}", environmentalPressure);
+    }
+
+    private static string FormatPopulation(int population)
+    {
+      return string.Format("Population: {0}", population);
+    }
+
+    private static string FormatGenerations(ushort generations)
+    {
+      return string.Format("Generations: {0}", generations);
     }
 
     private void OnSlowUiTick(object sender, EventArgs eventArgs)
