@@ -8,7 +8,7 @@ namespace PetriPlanet.Gui
   {
     private const int offset = WorldGridElement.WorldGridScale / 2;
     private readonly Experiment experiment;
-    private WorldGridElement[,] worldGridElements;
+    private readonly WorldGridElement[,] worldGridElements;
 
     public WorldView(Experiment experiment)
     {

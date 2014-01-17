@@ -9,13 +9,15 @@ namespace PetriPlanet.Gui
   {
     //private const string dreamtimeFormatString = "yyyy-MM-dd HH:mm:ss";
     private const string dreamtimeFormatString = "MM/dd/yyyy HH:mm:ss";
-    private const int maxSpeed = 100;
+    private const int maxSpeed = 50;
 
     private readonly Experiment experiment;
 
     private FlowLayoutPanel verticalLayout;
     private TrackBar trackBar;
     private Label clockLabel;
+    private Label populationLabel;
+    private Label generationsLabel;
     private WorldView worldView;
 
     private Timer simulationTimer;
@@ -51,6 +53,24 @@ namespace PetriPlanet.Gui
       };
       this.verticalLayout.Controls.Add(headerLayout);
 
+      this.populationLabel = new Label {
+        Text = string.Format("Population: {0}", this.experiment.Population),
+        ForeColor = Color.LightGray,
+        AutoSize = true,
+        // Hackish
+        Width = 150,
+      };
+      this.verticalLayout.Controls.Add(this.populationLabel);
+
+      this.generationsLabel = new Label {
+        Text = string.Format("Generations: {0}", this.experiment.GetGenerations()),
+        ForeColor = Color.LightGray,
+        AutoSize = true,
+        // Hackish
+        Width = 150,
+      };
+      this.verticalLayout.Controls.Add(this.generationsLabel);
+
       this.worldView = new WorldView(this.experiment);
       this.verticalLayout.Controls.Add(this.worldView);
 
@@ -79,7 +99,7 @@ namespace PetriPlanet.Gui
 
       this.simulationTimer = new Timer {
         Enabled = true,
-        Interval = 1000,
+        Interval = 500,
       };
       this.simulationTimer.Tick += this.OnSimulationTick;
 
@@ -94,8 +114,11 @@ namespace PetriPlanet.Gui
     {
       this.experiment.Tick();
       this.clockLabel.Text = this.experiment.CurrentTime.ToString(dreamtimeFormatString);
+      this.populationLabel.Text = string.Format("Population: {0}", this.experiment.Population);
+      this.generationsLabel.Text = string.Format("Generations: {0}", this.experiment.GetGenerations());
+
       var trackBarValue = this.trackBar.Value;
-      this.simulationTimer.Interval = trackBarValue == maxSpeed ? 1 : 1000 / trackBarValue;
+      this.simulationTimer.Interval = trackBarValue == maxSpeed ? 1 : 500 / trackBarValue;
     }
 
     private void OnSlowUiTick(object sender, EventArgs eventArgs)

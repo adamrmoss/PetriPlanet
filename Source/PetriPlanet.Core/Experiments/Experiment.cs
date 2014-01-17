@@ -18,11 +18,21 @@ namespace PetriPlanet.Core.Experiments
     public ushort MinBiomassEnergy { get; private set; }
     public ushort MaxBiomassEnergy { get; private set; }
     public ushort BiomassRegenRate { get; set; }
-    public float PoisonEfficacy { get; set; }
+    public float EnvironmentalPressure { get; set; }
 
     public Biomass[,] Biomasses { get; private set; }
     public Organism[,] Organisms { get; private set; }
     public HashSet<Organism> SetOfOrganisms { get; private set; }
+
+    public int Population
+    {
+      get { return this.SetOfOrganisms.Count; }
+    }
+
+    public ushort GetGenerations()
+    {
+      return this.SetOfOrganisms.Max(organism => organism.Generation);
+    }
 
     public DateTime CurrentTime { get; private set; }
     public Random Random { get; private set; }
@@ -49,7 +59,7 @@ namespace PetriPlanet.Core.Experiments
       this.MinBiomassEnergy = setup.MinBiomassEnergy;
       this.MaxBiomassEnergy = setup.MaxBiomassEnergy;
       this.BiomassRegenRate = setup.BiomassRegenRate;
-      this.PoisonEfficacy = setup.PoisonEfficacy;
+      this.EnvironmentalPressure = setup.EnvironmentalPressure;
 
       this.Random = new Random(setup.Seed);
       this.CurrentTime = setup.StartDate ?? dayOne;
@@ -147,7 +157,7 @@ namespace PetriPlanet.Core.Experiments
         if (presentBiomass.IsFood) {
           organism.AbsorbEnergy(presentBiomass.Energy);
         } else {
-          var energyToDeduct = (ushort) (presentBiomass.Energy * this.PoisonEfficacy);
+          var energyToDeduct = (ushort) (presentBiomass.Energy * this.EnvironmentalPressure);
           organism.DeductEnergy(energyToDeduct);
           this.EnergyBuffer += presentBiomass.Energy * 2;
         }
@@ -215,7 +225,7 @@ namespace PetriPlanet.Core.Experiments
         organism.DeductEnergy(energy);
 
         var mutatedInstructions = organism.GetMutatedInstructions();
-        var daughter = new Organism(Guid.NewGuid(), facedPosition.Item1, facedPosition.Item2, organism.FacingDirection, energy, mutatedInstructions, this);
+        var daughter = new Organism(Guid.NewGuid(), (ushort) (organism.Generation + 1), facedPosition.Item1, facedPosition.Item2, organism.FacingDirection, energy, mutatedInstructions, this);
         this.SetupOrganism(daughter);
       }
     }

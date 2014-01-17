@@ -11,7 +11,7 @@ namespace PetriPlanet.Core.Experiments
     public ushort MinBiomassEnergy { get; set; }
     public ushort MaxBiomassEnergy { get; set; }
     public ushort BiomassRegenRate { get; set; }
-    public float PoisonEfficacy { get; set; }
+    public float EnvironmentalPressure { get; set; }
     public DateTime? StartDate { get; set; }
   }
 }

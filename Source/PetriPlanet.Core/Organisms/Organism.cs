@@ -11,6 +11,8 @@ namespace PetriPlanet.Core.Organisms
     private static readonly Instruction[] allInstructions = EnumerableExtensions.GetAllEnumValues<Instruction>();
 
     public Guid Id { get; private set; }
+    public ushort Generation { get; private set; }
+
     public ushort X { get; set; }
     public ushort Y { get; set; }
     public Direction FacingDirection { get; private set; }
@@ -26,9 +28,11 @@ namespace PetriPlanet.Core.Organisms
 
     private readonly Experiment experiment;
 
-    public Organism(Guid id, ushort x, ushort y, Direction facingDirection, ushort energy, Instruction[] instructions, Experiment experiment)
+    public Organism(Guid id, ushort generation, ushort x, ushort y, Direction facingDirection, ushort energy, Instruction[] instructions, Experiment experiment)
     {
       this.Id = id;
+      this.Generation = generation;
+
       this.X = x;
       this.Y = y;
       this.FacingDirection = facingDirection;

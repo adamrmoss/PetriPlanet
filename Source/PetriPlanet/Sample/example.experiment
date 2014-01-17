@@ -5,6 +5,6 @@
   "MinBiomassEnergy": 1024,
   "MaxBiomassEnergy": 8192,
   "BiomassRegenRate": 8,
-  "PoisonEfficacy": .118,
+  "EnvironmentalPressure": .118,
   "Seed": 108
 }

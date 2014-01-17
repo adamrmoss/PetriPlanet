@@ -49,7 +49,7 @@ namespace PetriPlanet
     {
       var json = File.ReadAllText(organismFilename);
       var organismSetup = JsonConvert.DeserializeObject<OrganismSetup>(json);
-      return new Organism(organismSetup.Id, organismSetup.X, organismSetup.Y, organismSetup.Direction, organismSetup.Energy, organismSetup.Instructions, experiment);
+      return new Organism(organismSetup.Id, 0, organismSetup.X, organismSetup.Y, organismSetup.Direction, organismSetup.Energy, organismSetup.Instructions, experiment);
     }
   }
 }
