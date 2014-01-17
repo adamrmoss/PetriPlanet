@@ -7,8 +7,8 @@ namespace PetriPlanet.Gui
 {
   public class ExperimentForm : Form
   {
-    //private const string dreamtimeFormatString = "yyyy-MM-dd HH:mm:ss";
-    private const string dreamtimeFormatString = "MM/dd/yyyy HH:mm:ss";
+    private const string descendingFormatString = "yyyy-MM-dd HH:mm:ss";
+    private const string westernFormatString = "MM/dd/yyyy HH:mm:ss";
     private const int maxSpeed = 50;
 
     private readonly Experiment experiment;
@@ -74,7 +74,7 @@ namespace PetriPlanet.Gui
       this.worldView = new WorldView(this.experiment);
       this.verticalLayout.Controls.Add(this.worldView);
 
-      var initialTime = this.experiment.CurrentTime.ToString(dreamtimeFormatString);
+      var initialTime = this.experiment.CurrentTime.ToString(westernFormatString);
       this.clockLabel = new Label {
         Text = initialTime,
         ForeColor = Color.LightGray,
@@ -113,7 +113,7 @@ namespace PetriPlanet.Gui
     private void OnSimulationTick(object sender, EventArgs eventArgs)
     {
       this.experiment.Tick();
-      this.clockLabel.Text = this.experiment.CurrentTime.ToString(dreamtimeFormatString);
+      this.clockLabel.Text = this.experiment.CurrentTime.ToString(westernFormatString);
       this.populationLabel.Text = string.Format("Population: {0}", this.experiment.Population);
       this.generationsLabel.Text = string.Format("Generations: {0}", this.experiment.GetGenerations());
 
@@ -128,7 +128,7 @@ namespace PetriPlanet.Gui
 
     private void OnExtinct()
     {
-      MessageBox.Show(this, "The population has gone extinct", "Extinct");
+      MessageBox.Show(this, "The population has gone extinct.", "Extinction");
       this.Close();
     }
   }

@@ -8,7 +8,7 @@ namespace PetriPlanet.Core.Organisms
     public ushort X { get; set; }
     public ushort Y { get; set; }
     public Direction Direction { get; set; }
-    public Instruction[] Instructions { get; set; }
     public ushort Energy { get; set; }
+    public Instruction[] Instructions { get; set; }
   }
 }

@@ -36,7 +36,7 @@ namespace PetriPlanet
       var experiment = new Experiment(experimentSetup);
 
       var organismFilenames = Directory.EnumerateFiles(experimentDirectory, "*.organism").ToArray();
-      var organisms = organismFilenames.Select(s => LoadOrganism(s, experiment));
+      var organisms = organismFilenames.Select(filename => LoadOrganism(filename, experiment));
       experiment.SetupOrganisms(organisms);
 
       var experimentForm = new ExperimentForm(experiment);
@@ -49,7 +49,7 @@ namespace PetriPlanet
     {
       var json = File.ReadAllText(organismFilename);
       var organismSetup = JsonConvert.DeserializeObject<OrganismSetup>(json);
-      return new Organism(organismSetup.Id, 0, organismSetup.X, organismSetup.Y, organismSetup.Direction, organismSetup.Energy, organismSetup.Instructions, experiment);
+      return new Organism(organismSetup.Id, 1, organismSetup.X, organismSetup.Y, organismSetup.Direction, organismSetup.Energy, organismSetup.Instructions, experiment);
     }
   }
 }
