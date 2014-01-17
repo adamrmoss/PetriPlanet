@@ -16,6 +16,7 @@ namespace PetriPlanet.Gui
     private FlowLayoutPanel verticalLayout;
     private TrackBar trackBar;
     private Label clockLabel;
+    private Label environmentalPressureLabel;
     private Label populationLabel;
     private Label generationsLabel;
     private WorldView worldView;
@@ -52,6 +53,15 @@ namespace PetriPlanet.Gui
         AutoSize = true,
       };
       this.verticalLayout.Controls.Add(headerLayout);
+
+      this.environmentalPressureLabel = new Label {
+        Text = string.Format("Environmental Pressure: {0}", this.experiment.EnvironmentalPressure),
+        ForeColor = Color.LightGray,
+        AutoSize = true,
+        // Hackish
+        Width = 200,
+      };
+      this.verticalLayout.Controls.Add(this.environmentalPressureLabel);
 
       this.populationLabel = new Label {
         Text = string.Format("Population: {0}", this.experiment.Population),
@@ -113,9 +123,10 @@ namespace PetriPlanet.Gui
     private void OnSimulationTick(object sender, EventArgs eventArgs)
     {
       this.experiment.Tick();
-      this.clockLabel.Text = this.experiment.CurrentTime.ToString(westernFormatString);
+      this.environmentalPressureLabel.Text = string.Format("Environmental Pressure: {0}", this.experiment.EnvironmentalPressure);
       this.populationLabel.Text = string.Format("Population: {0}", this.experiment.Population);
       this.generationsLabel.Text = string.Format("Generations: {0}", this.experiment.GetGenerations());
+      this.clockLabel.Text = this.experiment.CurrentTime.ToString(westernFormatString);
 
       var trackBarValue = this.trackBar.Value;
       this.simulationTimer.Interval = trackBarValue == maxSpeed ? 1 : 500 / trackBarValue;
