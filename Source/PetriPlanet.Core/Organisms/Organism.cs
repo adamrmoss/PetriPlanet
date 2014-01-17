@@ -111,6 +111,18 @@ namespace PetriPlanet.Core.Organisms
       Arrays.WrapCopy(firstBlock, 0, instructions, (ushort) (index + secondBlockLength), firstBlockLength);
     }
 
+    public OrganismSetup Save()
+    {
+      return new OrganismSetup {
+        Id = this.Id,
+        X = this.X,
+        Y = this.Y,
+        Direction = this.FacingDirection,
+        Energy = this.Energy,
+        Instructions = this.Instructions,
+      };
+    }
+
     public ushort Tick()
     {
       var currentInstruction = this.Instructions[this.Ip];

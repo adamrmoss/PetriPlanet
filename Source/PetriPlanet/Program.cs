@@ -12,13 +12,17 @@ namespace PetriPlanet
 {
   internal static class Program
   {
+    private static Experiment experiment;
+    private static ExperimentForm experimentForm;
+    private static string experimentDirectory;
+
     [STAThread]
     internal static void Main()
     {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
-      var lookupTable = Primes.LookupTable;
+      PrecomputePrimes();
 
       var openFileDialog = new OpenFileDialog {
         Title = "Open Experiment",
@@ -27,29 +31,65 @@ namespace PetriPlanet
       };
       var dialogResult = openFileDialog.ShowDialog();
       var experimentFilePath = openFileDialog.FileName;
-      var experimentDirectory = Path.GetDirectoryName(experimentFilePath);
+      experimentDirectory = Path.GetDirectoryName(experimentFilePath);
       if (experimentDirectory == null)
         throw new InvalidOperationException("experimentDirectory was null!!!");
 
       var json = File.ReadAllText(experimentFilePath);
       var experimentSetup = JsonConvert.DeserializeObject<ExperimentSetup>(json);
-      var experiment = new Experiment(experimentSetup);
+      experiment = new Experiment(experimentSetup);
 
       var organismFilenames = Directory.EnumerateFiles(experimentDirectory, "*.organism").ToArray();
-      var organisms = organismFilenames.Select(filename => LoadOrganism(filename, experiment));
+      var organisms = organismFilenames.Select(LoadOrganism);
       experiment.SetupOrganisms(organisms);
 
-      var experimentForm = new ExperimentForm(experiment);
+      experimentForm = new ExperimentForm(experiment);
+      experimentForm.FormClosing += OnExperimentFormClosing;
       experimentForm.Show();
       experimentForm.Focus();
       Application.Run(experimentForm);
     }
 
-    private static Organism LoadOrganism(string organismFilename, Experiment experiment)
+    private static void PrecomputePrimes()
+    {
+      var lookupTable = Primes.LookupTable;
+    }
+
+    private static Organism LoadOrganism(string organismFilename)
     {
       var json = File.ReadAllText(organismFilename);
       var organismSetup = JsonConvert.DeserializeObject<OrganismSetup>(json);
       return new Organism(organismSetup.Id, 1, organismSetup.X, organismSetup.Y, organismSetup.Direction, organismSetup.Energy, organismSetup.Instructions, experiment);
+    }
+
+    private static void OnExperimentFormClosing(object sender, FormClosingEventArgs formClosingEventArgs)
+    {
+      try {
+        if (experiment.Population > 0) {
+          var shouldSaveResult = MessageBox.Show(experimentForm, "Do you want to save the current population?", "Save?", MessageBoxButtons.YesNo);
+          if (shouldSaveResult == DialogResult.Yes) {
+            var existingOrganismFilenames = Directory.EnumerateFiles(experimentDirectory, "*.organism").ToArray();
+            foreach (var existingOrganismFilename in existingOrganismFilenames) {
+              File.Delete(existingOrganismFilename);
+            }
+
+            foreach (var organism in experiment.SetOfOrganisms) {
+              var organismSetup = organism.Save();
+              var json = JsonConvert.SerializeObject(organismSetup);
+
+              var filename = string.Format("{0}.organism", organism.Id);
+              var path = Path.Combine(experimentDirectory, filename);
+              var fileStream = File.Open(path, FileMode.Create);
+              var streamWriter = new StreamWriter(fileStream);
+              streamWriter.Write(json);
+              streamWriter.Flush();
+              fileStream.Close();
+            }
+          }
+        }
+      } catch (Exception e) {
+        Console.WriteLine(e);
+      }
     }
   }
 }
