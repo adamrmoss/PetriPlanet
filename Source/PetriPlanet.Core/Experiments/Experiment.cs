@@ -27,11 +27,18 @@ namespace PetriPlanet.Core.Experiments
     public DateTime CurrentTime { get; private set; }
     public Random Random { get; private set; }
 
-    public event Action<ushort, ushort> OnExperimentUpdated;
-    private void PublishOnExperimentUpdated(ushort x, ushort y)
+    public event Action<ushort, ushort> ExperimentUpdated;
+    private void PublishExperimentUpdated(ushort x, ushort y)
     {
-      if (this.OnExperimentUpdated != null)
-        this.OnExperimentUpdated(x, y);
+      if (this.ExperimentUpdated != null)
+        this.ExperimentUpdated(x, y);
+    }
+
+    public event Action Extinct;
+    private void PublishExtinct()
+    {
+      if (this.Extinct != null)
+        this.Extinct();
     }
 
     public Experiment(ExperimentSetup setup)
@@ -71,7 +78,7 @@ namespace PetriPlanet.Core.Experiments
 
       this.Organisms[organism.X, organism.Y] = organism;
       this.SetOfOrganisms.Add(organism);
-      this.PublishOnExperimentUpdated(organism.X, organism.Y);
+      this.PublishExperimentUpdated(organism.X, organism.Y);
     }
 
     public void DestroyOrganism(Organism organism)
@@ -81,19 +88,20 @@ namespace PetriPlanet.Core.Experiments
 
       this.SetOfOrganisms.Remove(organism);
       this.Organisms[organism.X, organism.Y] = null;
-      this.PublishOnExperimentUpdated(organism.X, organism.Y);
+      this.PublishExperimentUpdated(organism.X, organism.Y);
+      this.CheckForExtinction();
     }
 
     public void SetupBiomass(Biomass biomass)
     {
       this.Biomasses[biomass.X, biomass.Y] = biomass;
-      this.PublishOnExperimentUpdated(biomass.X, biomass.Y);
+      this.PublishExperimentUpdated(biomass.X, biomass.Y);
     }
 
     public void DestroyBiomass(Biomass biomass)
     {
       this.Biomasses[biomass.X, biomass.Y] = null;
-      this.PublishOnExperimentUpdated(biomass.X, biomass.Y);
+      this.PublishExperimentUpdated(biomass.X, biomass.Y);
     }
 
     public void Tick()
@@ -127,8 +135,8 @@ namespace PetriPlanet.Core.Experiments
         var oldX = organism.X;
         var oldY = organism.Y;
         this.ProcessOrganism(organism);
-        this.PublishOnExperimentUpdated(oldX, oldY);
-        this.PublishOnExperimentUpdated(organism.X, organism.Y);
+        this.PublishExperimentUpdated(oldX, oldY);
+        this.PublishExperimentUpdated(organism.X, organism.Y);
       }
     }
 
@@ -239,6 +247,12 @@ namespace PetriPlanet.Core.Experiments
       var facedOrganism = this.Organisms[facedPosition.Item1, facedPosition.Item2];
 
       return facedOrganism == null ? (ushort) 0 : facedOrganism.Energy;
+    }
+
+    private void CheckForExtinction()
+    {
+      if (this.SetOfOrganisms.Count == 0)
+        this.PublishExtinct();
     }
   }
 }

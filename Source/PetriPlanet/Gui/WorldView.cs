@@ -13,7 +13,7 @@ namespace PetriPlanet.Gui
     public WorldView(Experiment experiment)
     {
       this.experiment = experiment;
-      this.experiment.OnExperimentUpdated += this.OnExperimentUpdated;
+      this.experiment.ExperimentUpdated += this.OnExperimentUpdated;
       this.Width = (this.experiment.Width + 1) * WorldGridElement.WorldGridScale;
       this.Height = (this.experiment.Height + 1) * WorldGridElement.WorldGridScale;
       this.BackColor = Color.Black;

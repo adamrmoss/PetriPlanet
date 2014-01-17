@@ -24,6 +24,7 @@ namespace PetriPlanet.Gui
     public ExperimentForm(Experiment experiment)
     {
       this.experiment = experiment;
+      this.experiment.Extinct += this.OnExtinct;
       this.Initialize();
     }
 
@@ -82,11 +83,11 @@ namespace PetriPlanet.Gui
       };
       this.simulationTimer.Tick += this.OnSimulationTick;
 
-      var slowUiTimer = new Timer {
+      this.uiTimer = new Timer {
         Enabled = true,
         Interval = 1000,
       };
-      slowUiTimer.Tick += this.OnSlowUiTick;
+      this.uiTimer.Tick += this.OnSlowUiTick;
     }
 
     private void OnSimulationTick(object sender, EventArgs eventArgs)
@@ -100,6 +101,12 @@ namespace PetriPlanet.Gui
     private void OnSlowUiTick(object sender, EventArgs eventArgs)
     {
       this.worldView.Refresh();
+    }
+
+    private void OnExtinct()
+    {
+      MessageBox.Show(this, "The population has gone extinct", "Extinct");
+      this.Close();
     }
   }
 }
