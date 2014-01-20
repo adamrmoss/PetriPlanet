@@ -1,0 +1,9 @@
+﻿{
+  "Id": "b137d493-23cd-4e3a-b1d3-03c8a3d2c982",
+  "Energy": "65535",
+  "X": 14,
+  "Y": 10,
+  "Direction": "West",
+  "Instructions": ["Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "Walk", "TurnRight",
+                   "Clear", "Swap", "Decrement", "Swap", "ShiftRight", "ShiftRight", "ShiftRight", "ShiftRight", "Reproduce", "TurnLeft"]
+}
