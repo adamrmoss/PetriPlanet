@@ -49,8 +49,6 @@
   <ItemGroup>
     <Compile Include="ArraysSpecs.cs" />
     <Compile Include="Bdd\BddBase.cs" />
-    <Compile Include="Math\UShortsSpecs.cs" />
-    <Compile Include="PrimesSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
