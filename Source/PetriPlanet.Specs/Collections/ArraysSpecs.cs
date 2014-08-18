@@ -1,42 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using PetriPlanet.Core;
-using PetriPlanet.Core.Collections;
+﻿using PetriPlanet.Core.Collections;
 using PetriPlanet.Specs.Bdd;
+using Xunit;
+using Xunit.Should;
 
-namespace PetriPlanet.Specs
+namespace PetriPlanet.Specs.Collections
 {
-  [TestFixture]
   public class ArraysSpecs : BddBase
   {
-    private int[] sourceArray;
-    private int[] destinationArray;
+    private readonly int[] sourceArray;
+    private readonly int[] destinationArray;
 
-    [SetUp]
-    public void SetUp()
+    public ArraysSpecs()
     {
       this.sourceArray = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
       this.destinationArray = new[] { 104, 103, 102, 101, 100 };
     }
 
-    [Test]
+    [Fact]
     public void ItCanPerformAnOrdinaryCopy()
     {
       Arrays.WrapCopy(this.sourceArray, 3, this.destinationArray, 1, 3);
 
-      Expect(this.destinationArray, EqualTo(new[] {104, 4, 5, 6, 100}));
+      this.destinationArray.ShouldBe(new[] { 104, 4, 5, 6, 100 });
     }
 
-    [Test]
+    [Fact]
     public void ItCanPerformAWrappedCopy()
     {
       Arrays.WrapCopy(this.sourceArray, 8, this.destinationArray, 3, 3);
 
-      Expect(this.destinationArray, EqualTo(new[] {1, 103, 102, 9, 10}));
+      this.destinationArray.ShouldBe(new[] { 1, 103, 102, 9, 10 });
     }
   }
 }

@@ -98,7 +98,19 @@ namespace PetriPlanet.Core.Organisms
 
     public void Tick()
     {
+      this.Sense();
+      this.Act();
+      this.Injury = 0.0;
+    }
 
+    private void Sense()
+    {
+      throw new NotImplementedException();
+    }
+
+    private void Act()
+    {
+      throw new NotImplementedException();
     }
 
     //public void DeductEnergy(double energy)
