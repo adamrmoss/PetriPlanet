@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using PetriPlanet.Core;
+using PetriPlanet.Core.Collections;
 using PetriPlanet.Specs.Bdd;
 
 namespace PetriPlanet.Specs

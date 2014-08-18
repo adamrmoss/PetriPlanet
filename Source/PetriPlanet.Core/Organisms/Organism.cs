@@ -19,39 +19,55 @@ namespace PetriPlanet.Core.Organisms
     public int Y { get; set; }
     public Direction Direction { get; private set; }
 
+    public double Red { get; private set; }
+    public double Green { get; private set; }
+    public double Blue { get; private set; }
+
     public double Health { get; private set; }
+    public double Injury { get; private set; }
     public double Steering { get; private set; }
     public double Motor { get; private set; }
     public double Aggression { get; private set; }
     public double Reproduction { get; private set; }
+
+    public double SensedLeftHealth { get; private set; }
+    public double SensedFrontHealth { get; private set; }
+    public double SensedRightHealth { get; private set; }
+    public double SensedLeftAggression { get; private set; }
+    public double SensedFrontAggression { get; private set; }
+    public double SensedRightAggression { get; private set; }
+    public double SensedFrontReproduction { get; private set; }
+    public double SensedLight { get; private set; }
 
     public Instruction[] SteeringInstructions { get; private set; }
     public Instruction[] MotorInstructions { get; private set; }
     public Instruction[] AggressionInstructions { get; private set; }
     public Instruction[] ReproductionInstructions { get; private set; }
 
-    public Organism(Experiment experiment, Guid id, int generation, int x, int y, Direction direction,
-      double health, double steering, double motor, double aggression, double reproduction,
-      Instruction[] steeringInstructions, Instruction[] motorInstructions, Instruction[] aggressionInstructions, Instruction[] reproductionInstructions)
+    public Organism(Experiment experiment, OrganismSetup organismSetup)
     {
       this.experiment = experiment;
 
-      this.Id = id;
-      this.Generation = generation;
-      this.X = x;
-      this.Y = y;
-      this.Direction = direction;
+      this.Id = organismSetup.Id;
+      this.Generation = organismSetup.Generation;
+      this.X = organismSetup.X;
+      this.Y = organismSetup.Y;
+      this.Direction = organismSetup.Direction;
 
-      this.Health = health;
-      this.Steering = steering;
-      this.Motor = motor;
-      this.Aggression = aggression;
-      this.Reproduction = reproduction;
+      this.Red = organismSetup.Red;
+      this.Green = organismSetup.Green;
+      this.Blue = organismSetup.Blue;
 
-      this.SteeringInstructions = steeringInstructions;
-      this.MotorInstructions = motorInstructions;
-      this.AggressionInstructions = aggressionInstructions;
-      this.ReproductionInstructions = reproductionInstructions;
+      this.Health = organismSetup.Health;
+      this.Steering = organismSetup.Steering;
+      this.Motor = organismSetup.Motor;
+      this.Aggression = organismSetup.Aggression;
+      this.Reproduction = organismSetup.Reproduction;
+
+      this.SteeringInstructions = organismSetup.SteeringInstructions;
+      this.MotorInstructions = organismSetup.MotorInstructions;
+      this.AggressionInstructions = organismSetup.AggressionInstructions;
+      this.ReproductionInstructions = organismSetup.ReproductionInstructions;
     }
 
     public OrganismSetup Save()
@@ -62,11 +78,17 @@ namespace PetriPlanet.Core.Organisms
         X = this.X,
         Y = this.Y,
         Direction = this.Direction,
+
+        Red = this.Red,
+        Green = this.Green,
+        Blue = this.Blue,
+
         Health = this.Health,
         Steering = this.Steering,
         Motor = this.Motor,
         Aggression = this.Aggression,
         Reproduction = this.Reproduction,
+
         SteeringInstructions = this.SteeringInstructions,
         MotorInstructions = this.MotorInstructions,
         AggressionInstructions = this.AggressionInstructions,

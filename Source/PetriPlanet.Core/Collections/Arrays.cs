@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PetriPlanet.Core
+namespace PetriPlanet.Core.Collections
 {
   public static class Arrays
   {
-    public static void WrapCopy<T>(T[] sourceArray, T[] destinationArray, int length)
-    {
-      WrapCopy(sourceArray, (ushort) sourceArray.Length, destinationArray, (ushort) destinationArray.Length, length);
-    }
-
     public static void WrapCopy<T>(T[] sourceArray, int sourceIndex, T[] destinationArray, int destinationIndex, int length)
     {
       var tempArray = new T[length];
