@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using PetriPlanet.Core;
+using PetriPlanet.Core.Maths;
 using PetriPlanet.Core.Organisms;
 
 namespace PetriPlanet.Gui
@@ -16,8 +17,10 @@ namespace PetriPlanet.Gui
 
     public Color GetColor()
     {
-      var red = 256 * Organism.A
-      return this.Type.GetColor().ApplyIntensity(this.Intensity);
+      var red = (int) (256 * Organism.Red);
+      var green = (int) (256 * Organism.Green);
+      var blue = (int) (256 * Organism.Blue);
+      return Color.FromArgb(red, green, blue).ApplyIntensity(this.Intensity);
     }
 
     public void Draw(Graphics graphics, int left, int top)

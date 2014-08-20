@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PetriPlanet.Core.Maths;
 using PetriPlanet.Core.Organisms;
 
 namespace PetriPlanet.Core.Experiments
@@ -13,6 +14,8 @@ namespace PetriPlanet.Core.Experiments
     public int Width { get; private set; }
     public int Height { get; private set; }
     public int SunSize { get; private set; }
+    public int SunX { get; private set; }
+    public int SunY { get; private set; }
 
     public double EnergyDensity { get; private set; }
     public double EnergyBuffer { get; private set; }
@@ -39,13 +42,6 @@ namespace PetriPlanet.Core.Experiments
 
     public DateTime CurrentTime { get; private set; }
     public Random Random { get; private set; }
-
-    public event Action<int, int> ExperimentUpdated;
-    private void PublishExperimentUpdated(int x, int y)
-    {
-      if (this.ExperimentUpdated != null)
-        this.ExperimentUpdated(x, y);
-    }
 
     public Experiment(ExperimentSetup setup)
     {
@@ -83,7 +79,6 @@ namespace PetriPlanet.Core.Experiments
 
       this.Organisms[organism.X, organism.Y] = organism;
       this.SetOfOrganisms.Add(organism);
-      this.PublishExperimentUpdated(organism.X, organism.Y);
     }
 
     public void DestroyOrganism(Organism organism)
@@ -93,8 +88,6 @@ namespace PetriPlanet.Core.Experiments
 
       this.SetOfOrganisms.Remove(organism);
       this.Organisms[organism.X, organism.Y] = null;
-      this.PublishExperimentUpdated(organism.X, organism.Y);
-      this.CheckForExtinction();
     }
 
     public void Tick()
@@ -106,75 +99,17 @@ namespace PetriPlanet.Core.Experiments
     private void ProcessOrganisms()
     {
       foreach (var organism in this.SetOfOrganisms.ToArray()) {
-        var oldX = organism.X;
-        var oldY = organism.Y;
         this.ProcessOrganism(organism);
-        this.PublishExperimentUpdated(oldX, oldY);
-        this.PublishExperimentUpdated(organism.X, organism.Y);
       }
     }
 
     private void ProcessOrganism(Organism organism)
     {
-      var energyCost = organism.Tick();
-      organism.DeductEnergy(energyCost);
-      this.EnergyBuffer += energyCost;
+      organism.Tick();
 
-      if (organism.Health == 0) {
+      if (organism.Health <= 0) {
         this.DestroyOrganism(organism);
       }
-    }
-
-    private Tuple<ushort, ushort> FollowDirectionToPosition(int x, int y, Direction? direction)
-    {
-      if (direction == null)
-        return null;
-
-      var newX = (ushort) ((x + direction.Value.GetDeltaX() + this.Width) % this.Width);
-      var newY = (ushort) ((y + direction.Value.GetDeltaY() + this.Height) % this.Height);
-      return Tuple.Create(newX, newY);
-    }
-
-    public void Reproduce(Organism organism)
-    {
-      var facedPosition = this.FollowDirectionToPosition(organism.X, organism.Y, organism.Direction);
-      var facedOrganism = this.Organisms[facedPosition.Item1, facedPosition.Item2];
-
-      if (facedOrganism == null) {
-        var energy = Math.Min(organism.Health, organism.Ax);
-        organism.DeductEnergy(energy);
-
-        var mutatedInstructions = organism.GetMutatedInstructions();
-        var daughter = new Organism(Guid.NewGuid(), (ushort) (organism.Generation + 1), facedPosition.Item1, facedPosition.Item2, organism.Direction, energy, mutatedInstructions, this);
-        this.SetupOrganism(daughter);
-      }
-    }
-
-    public void Walk(Organism organism)
-    {
-      var facedPosition = this.FollowDirectionToPosition(organism.X, organism.Y, organism.Direction);
-      var facedOrganism = this.Organisms[facedPosition.Item1, facedPosition.Item2];
-
-      if (facedOrganism == null) {
-        this.Organisms[organism.X, organism.Y] = null;
-        organism.X = facedPosition.Item1;
-        organism.Y = facedPosition.Item2;
-        this.Organisms[organism.X, organism.Y] = organism;
-      }
-    }
-
-    public ushort GetEnergyOfFacedOrganism(Organism organism)
-    {
-      var facedPosition = this.FollowDirectionToPosition(organism.X, organism.Y, organism.Direction);
-      var facedOrganism = this.Organisms[facedPosition.Item1, facedPosition.Item2];
-
-      return facedOrganism == null ? (ushort) 0 : facedOrganism.Health;
-    }
-
-    private void CheckForExtinction()
-    {
-      if (this.SetOfOrganisms.Count == 0)
-        this.PublishExtinct();
     }
   }
 }

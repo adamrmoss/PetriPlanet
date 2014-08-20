@@ -47,9 +47,10 @@
   <ItemGroup>
     <Compile Include="Collections\Arrays.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
-    <Compile Include="Direction.cs" />
+    <Compile Include="Maths\Direction.cs" />
     <Compile Include="Experiments\ExperimentSetup.cs" />
     <Compile Include="Maths\DoubleExtensions.cs" />
+    <Compile Include="Maths\Position.cs" />
     <Compile Include="Organisms\InstructionInterpreter.cs" />
     <Compile Include="Organisms\OrganismSetup.cs" />
     <Compile Include="Organisms\Instruction.cs" />

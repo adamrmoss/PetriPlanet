@@ -99,17 +99,63 @@ namespace PetriPlanet.Core.Organisms
     public void Tick()
     {
       this.Sense();
+      this.Think();
       this.Act();
-      this.Injury = 0.0;
     }
 
     private void Sense()
     {
-      throw new NotImplementedException();
+      var position = Tuple.Create(this.X, this.Y);
+      var frontPosition = Position.FollowDirection(position, this.Direction, this.experiment.Width, this.experiment.Height);
+      var leftPosition = Position.FollowDirection(frontPosition, this.Direction.TurnLeft(), this.experiment.Width, this.experiment.Height);
+      var rightPosition = Position.FollowDirection(frontPosition, this.Direction.TurnRight(), this.experiment.Width, this.experiment.Height);
+
+      var frontNeighbor = this.experiment.Organisms[frontPosition.Item1, frontPosition.Item2];
+      var leftNeighbor = this.experiment.Organisms[leftPosition.Item1, leftPosition.Item2];
+      var rightNeighbor = this.experiment.Organisms[rightPosition.Item1, rightPosition.Item2];
+
+      this.SensedFrontHealth = frontNeighbor == null ? 0 : frontNeighbor.Health;
+      this.SensedFrontAggression = frontNeighbor == null ? 0 : frontNeighbor.Aggression;
+      this.SensedFrontReproduction = frontNeighbor == null ? 0 : frontNeighbor.Reproduction;
+
+      this.SensedLeftHealth = leftNeighbor == null ? 0 : leftNeighbor.Health;
+      this.SensedLeftAggression = leftNeighbor == null ? 0 : leftNeighbor.Aggression;
+
+      this.SensedRightHealth = rightNeighbor == null ? 0 : rightNeighbor.Health;
+      this.SensedRightAggression = rightNeighbor == null ? 0 : rightNeighbor.Aggression;
+
+
+      //var isInLight = this.X >= this.experiment.SunX && this.X < this.experiment.SunX + this.experiment.SunSize &&
+      //                this.Y >= this.experiment.
+      //this.SensedLight
+    }
+
+    private void Think()
+    {
+      var steeringInterpreter = new InstructionInterpreter(this, this.experiment.Random);
+      var steering = steeringInterpreter.ExecuteInstructions(this.SteeringInstructions);
+      var motorInterpreter = new InstructionInterpreter(this, this.experiment.Random);
+      var motor = motorInterpreter.ExecuteInstructions(this.MotorInstructions);
+      var aggressionInterpreter = new InstructionInterpreter(this, this.experiment.Random);
+      var aggression = aggressionInterpreter.ExecuteInstructions(this.AggressionInstructions);
+      var reproductionInterpreter = new InstructionInterpreter(this, this.experiment.Random);
+      var reproduction = reproductionInterpreter.ExecuteInstructions(this.ReproductionInstructions);
+
+      this.Steering = steering;
+      this.Motor = motor;
+      this.Aggression = aggression;
+      this.Reproduction = reproduction;
+
+      this.Injury = 0.0;
     }
 
     private void Act()
     {
+      var energyConsumed = 0.0;
+      // TODO: Check for Reproduction and possibly reproduce-and-end-turn
+      // TODO: Check for movement
+      // TODO: If move, check destination.  Combat if required.  Otherwise move successful.
+      // TODO: Deduct energy.
       throw new NotImplementedException();
     }
 
