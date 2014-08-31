@@ -1,11 +1,10 @@
 ﻿using PetriPlanet.Core.Collections;
-using PetriPlanet.Specs.Bdd;
 using Xunit;
 using Xunit.Should;
 
 namespace PetriPlanet.Specs.Collections
 {
-  public class ArraysSpecs : BddBase
+  public class ArraysSpecs
   {
     private readonly int[] sourceArray;
     private readonly int[] destinationArray;

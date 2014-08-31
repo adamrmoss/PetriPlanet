@@ -1,24 +1,26 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using PetriPlanet.Core.Experiments;
+using PetriPlanet.Core.Maths;
+using PetriPlanet.Core.Organisms;
 
 namespace PetriPlanet.Gui
 {
   public sealed class WorldView : Control
   {
-    private const int offset = WorldGridElement.WorldGridScale / 2;
+    public const int WorldGridScale = 16;
+    private const int offset = WorldGridScale / 2;
+
     private readonly Experiment experiment;
-    private readonly WorldGridElement[,] worldGridElements;
 
     public WorldView(Experiment experiment)
     {
       this.experiment = experiment;
-      this.experiment.ExperimentUpdated += this.OnExperimentUpdated;
-      this.Width = (this.experiment.Width + 1) * WorldGridElement.WorldGridScale;
-      this.Height = (this.experiment.Height + 1) * WorldGridElement.WorldGridScale;
+      this.Width = (this.experiment.Width + 1) * WorldGridScale;
+      this.Height = (this.experiment.Height + 1) * WorldGridScale;
       this.BackColor = Color.Black;
 
-      this.worldGridElements = WorldGridElement.GetWorldGridElements(this.experiment.Organisms, this.experiment.Biomasses);
       this.Refresh();
     }
 
@@ -34,29 +36,76 @@ namespace PetriPlanet.Gui
 
       for (var x = minX; x < maxX; x++) {
         for (var y = minY; y < maxY; y++) {
-          var worldGridElement = this.worldGridElements[x, y];
-
+          var organism = this.experiment.Organisms[x, y];
           var left = ToScreenCoordinate(x);
           var top = ToScreenCoordinate(y);
-          worldGridElement.Draw(eventArgs.Graphics, left, top);
+
+          this.Draw(eventArgs.Graphics, organism, left, top);
         }
       }
     }
 
-    private static int ToScreenCoordinate(ushort x)
+    private static int ToScreenCoordinate(int x)
     {
-      return x * WorldGridElement.WorldGridScale + offset;
+      return x * WorldGridScale + offset;
     }
 
-    private static ushort ToLogicalCoordinate(int x)
+    private static int ToLogicalCoordinate(int x)
     {
-      return (ushort) ((x - offset) / WorldGridElement.WorldGridScale);
+      return (x - offset) / WorldGridScale;
     }
 
-    private void OnExperimentUpdated(ushort x, ushort y)
+    public Color GetOrganismColor(Organism organism)
     {
-      this.worldGridElements[x, y] = WorldGridElement.GetWorldGridElement(this.experiment.Organisms[x, y], this.experiment.Biomasses[x, y]);
-      this.Invalidate(new Rectangle(ToScreenCoordinate(x), ToScreenCoordinate(y), WorldGridElement.WorldGridScale, WorldGridElement.WorldGridScale));
+      var red = Math.Min((int) (organism.Red * organism.Health * 768), 256);
+      var green = Math.Min((int) (organism.Green * organism.Health * 768), 256);
+      var blue = Math.Min((int) (organism.Blue * organism.Health * 768), 256);
+      return Color.FromArgb(red, green, blue);
     }
+
+    public void Draw(Graphics graphics, Organism organism, int left, int top)
+    {
+      var backgroundBrush = new SolidBrush(Color.Black);
+      graphics.FillRectangle(backgroundBrush, left, top, WorldGridScale, WorldGridScale);
+
+      if (organism != null) {
+        var organismBrush = new SolidBrush(this.GetOrganismColor(organism));
+        var trianglePoints = GetTrianglePoints(organism.Direction, left, top);
+        graphics.FillPolygon(organismBrush, trianglePoints);
+      }
+    }
+
+    private static Point[] GetTrianglePoints(Direction direction, int left, int top)
+    {
+      switch (direction) {
+        case Direction.East:
+          return new[] {
+            new Point(left + WorldGridScale / 2, top),
+            new Point(left + WorldGridScale, top + WorldGridScale / 2),
+            new Point(left + WorldGridScale / 2, top + WorldGridScale),
+          };
+        case Direction.North:
+          return new[] {
+            new Point(left, top + WorldGridScale / 2),
+            new Point(left + WorldGridScale / 2, top),
+            new Point(left + WorldGridScale, top + WorldGridScale / 2),
+          };
+        case Direction.West:
+          return new[] {
+            new Point(left + WorldGridScale / 2, top),
+            new Point(left, top + WorldGridScale / 2),
+            new Point(left + WorldGridScale / 2, top + WorldGridScale),
+          };
+        case Direction.South:
+          return new[] {
+            new Point(left, top + WorldGridScale / 2),
+            new Point(left + WorldGridScale / 2, top + WorldGridScale),
+            new Point(left + WorldGridScale, top + WorldGridScale / 2),
+          };
+        default:
+          throw new ArgumentException("Direction not found: " + direction);
+      }
+    }
+
   }
 }

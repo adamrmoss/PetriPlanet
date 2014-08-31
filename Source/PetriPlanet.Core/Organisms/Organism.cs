@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using PetriPlanet.Core.Collections;
 using PetriPlanet.Core.Experiments;
@@ -54,9 +55,10 @@ namespace PetriPlanet.Core.Organisms
       this.Y = organismSetup.Y;
       this.Direction = organismSetup.Direction;
 
-      this.Red = organismSetup.Red;
-      this.Green = organismSetup.Green;
-      this.Blue = organismSetup.Blue;
+      var totalHue = organismSetup.Red + organismSetup.Green + organismSetup.Blue;
+      this.Red = organismSetup.Red / totalHue;
+      this.Green = organismSetup.Green / totalHue;
+      this.Blue = organismSetup.Blue / totalHue;
 
       this.Health = organismSetup.Health;
       this.Steering = organismSetup.Steering;

@@ -22,8 +22,6 @@ namespace PetriPlanet
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
-      PrecomputePrimes();
-
       var openFileDialog = new OpenFileDialog {
         Title = "Open Experiment",
         Filter = "Experiment files (*.experiment)|*.experiment",
@@ -50,16 +48,11 @@ namespace PetriPlanet
       Application.Run(experimentForm);
     }
 
-    private static void PrecomputePrimes()
-    {
-      var lookupTable = Primes.LookupTable;
-    }
-
     private static Organism LoadOrganism(string organismFilename)
     {
       var json = File.ReadAllText(organismFilename);
       var organismSetup = JsonConvert.DeserializeObject<OrganismSetup>(json);
-      return new Organism(organismSetup.Id, 1, organismSetup.X, organismSetup.Y, organismSetup.Direction, organismSetup.Energy, organismSetup.Instructions, experiment);
+      return new Organism(experiment, organismSetup);
     }
 
     private static void OnExperimentFormClosing(object sender, FormClosingEventArgs formClosingEventArgs)

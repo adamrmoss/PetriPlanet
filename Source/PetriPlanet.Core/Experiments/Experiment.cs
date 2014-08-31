@@ -27,6 +27,8 @@ namespace PetriPlanet.Core.Experiments
     public Organism[,] Organisms { get; private set; }
     public HashSet<Organism> SetOfOrganisms { get; private set; }
 
+    public event Action Extinct;
+
     public int Population
     {
       get { return this.SetOfOrganisms.Count; }
