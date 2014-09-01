@@ -10,8 +10,6 @@ namespace PetriPlanet.Core.Organisms
 {
   public class Organism
   {
-    private static readonly Instruction[] allInstructions = EnumerableExtensions.GetAllEnumValues<Instruction>();
-
     private readonly Experiment experiment;
 
     public Guid Id { get; private set; }
