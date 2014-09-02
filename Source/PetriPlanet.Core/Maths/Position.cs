@@ -14,5 +14,14 @@ namespace PetriPlanet.Core.Maths
       var newY = (startingPosition.Item2 + direction.GetDeltaY() + yMax) % yMax;
       return Tuple.Create(newX, newY);
     }
+
+    public static bool IsInWrappedRange(this int index, int rangeStart, int rangeLength, int length)
+    {
+      if (index > length)
+        throw new IndexOutOfRangeException("index > length");
+
+      return (index >= rangeStart && index < Math.Min(rangeStart + rangeLength, length)) ||
+             (rangeStart + rangeLength > length && index < (rangeStart + rangeLength) % length);
+    }
   }
 }
