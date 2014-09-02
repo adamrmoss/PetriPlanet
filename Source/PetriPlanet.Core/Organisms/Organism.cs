@@ -114,30 +114,33 @@ namespace PetriPlanet.Core.Organisms
       var leftNeighbor = this.experiment.Organisms[leftPosition.Item1, leftPosition.Item2];
       var rightNeighbor = this.experiment.Organisms[rightPosition.Item1, rightPosition.Item2];
 
-      this.SensedFrontHealth = frontNeighbor == null ? 0 : frontNeighbor.Health;
-      this.SensedFrontAggression = frontNeighbor == null ? 0 : frontNeighbor.Aggression;
-      this.SensedFrontReproduction = frontNeighbor == null ? 0 : frontNeighbor.Reproduction;
+      this.SensedFrontHealth = frontNeighbor == null ? 0.0 : frontNeighbor.Health;
+      this.SensedFrontAggression = frontNeighbor == null ? 0.0 : frontNeighbor.Aggression;
+      this.SensedFrontReproduction = frontNeighbor == null ? 0.0 : frontNeighbor.Reproduction;
 
-      this.SensedLeftHealth = leftNeighbor == null ? 0 : leftNeighbor.Health;
-      this.SensedLeftAggression = leftNeighbor == null ? 0 : leftNeighbor.Aggression;
+      this.SensedLeftHealth = leftNeighbor == null ? 0.0 : leftNeighbor.Health;
+      this.SensedLeftAggression = leftNeighbor == null ? 0.0 : leftNeighbor.Aggression;
 
-      this.SensedRightHealth = rightNeighbor == null ? 0 : rightNeighbor.Health;
-      this.SensedRightAggression = rightNeighbor == null ? 0 : rightNeighbor.Aggression;
+      this.SensedRightHealth = rightNeighbor == null ? 0.0 : rightNeighbor.Health;
+      this.SensedRightAggression = rightNeighbor == null ? 0.0 : rightNeighbor.Aggression;
 
+      var isInLight = this.X.IsInWrappedRange(this.experiment.SunX, this.experiment.SunSize, this.experiment.Width) &&
+                      this.Y.IsInWrappedRange(this.experiment.SunY, this.experiment.SunSize, this.experiment.Height);
 
-      //var isInLight = this.X >= this.experiment.SunX && this.X < this.experiment.SunX + this.experiment.SunSize &&
-      //                this.Y >= this.experiment.
-      //this.SensedLight
+      this.SensedLight = isInLight ? 1.0 : 0.0;
     }
 
     private void Think()
     {
       var steeringInterpreter = new InstructionInterpreter(this, this.experiment.Random);
       var steering = steeringInterpreter.ExecuteInstructions(this.SteeringInstructions);
+
       var motorInterpreter = new InstructionInterpreter(this, this.experiment.Random);
       var motor = motorInterpreter.ExecuteInstructions(this.MotorInstructions);
+
       var aggressionInterpreter = new InstructionInterpreter(this, this.experiment.Random);
       var aggression = aggressionInterpreter.ExecuteInstructions(this.AggressionInstructions);
+
       var reproductionInterpreter = new InstructionInterpreter(this, this.experiment.Random);
       var reproduction = reproductionInterpreter.ExecuteInstructions(this.ReproductionInstructions);
 
@@ -151,12 +154,30 @@ namespace PetriPlanet.Core.Organisms
 
     private void Act()
     {
-      var energyConsumed = 0.0;
-      // TODO: Check for Reproduction and possibly reproduce-and-end-turn
-      // TODO: Check for movement
-      // TODO: If move, check destination.  Combat if required.  Otherwise move successful.
-      // TODO: Deduct energy.
-      throw new NotImplementedException();
+      var willReproduce = this.Reproduction > 0.0;
+      var willMove = this.experiment.Random.NextDouble() < this.Motor;
+
+      if (willReproduce) {
+        this.Reproduce();
+      } else if (willMove) {
+        this.Move();
+      }
+    }
+
+    private void Reproduce()
+    {
+      var prospectivePartnerPosition = Position.FollowDirection(Tuple.Create(this.X, this.Y), this.Direction, this.experiment.Width, this.experiment.Height);
+      var prospectivePartner = this.experiment.Organisms[prospectivePartnerPosition.Item1, prospectivePartnerPosition.Item2];
+      if (prospectivePartner != null && prospectivePartner.Reproduction > 0.0) {
+        throw new NotImplementedException();
+      }
+    }
+
+    private void Move()
+    {
+      var steeringRoll = this.experiment.Random.NextDouble();
+      var steeringDirection = this.Steering < 0.5 && steeringRoll > this.Steering * 2 ? this.Direction.TurnLeft() :
+                              this.Steering > 0.5 && steeringRoll < (this.Steering - 0.5) * 2 ? this.Direction.TurnRight() : this.Direction;
     }
 
     //public void DeductEnergy(double energy)
