@@ -16,7 +16,6 @@ namespace PetriPlanet.Gui
     private FlowLayoutPanel verticalLayout;
     private TrackBar trackBar;
     private Label clockLabel;
-    private Label environmentalPressureLabel;
     private Label populationLabel;
     private Label generationsLabel;
     private WorldView worldView;
@@ -53,15 +52,6 @@ namespace PetriPlanet.Gui
         AutoSize = true,
       };
       this.verticalLayout.Controls.Add(headerLayout);
-
-      this.environmentalPressureLabel = new Label {
-        Text = FormatEnvironmentalPressure(this.experiment.EnvironmentalPressure),
-        ForeColor = Color.LightGray,
-        AutoSize = true,
-        // Hackish
-        Width = 200,
-      };
-      this.verticalLayout.Controls.Add(this.environmentalPressureLabel);
 
       this.populationLabel = new Label {
         Text = FormatPopulation(this.experiment.Population),
@@ -123,7 +113,6 @@ namespace PetriPlanet.Gui
     private void OnSimulationTick(object sender, EventArgs eventArgs)
     {
       this.experiment.Tick();
-      this.environmentalPressureLabel.Text = FormatEnvironmentalPressure(this.experiment.EnvironmentalPressure);
       this.populationLabel.Text = FormatPopulation(this.experiment.Population);
       this.generationsLabel.Text = FormatGenerations(this.experiment.GetGenerations());
       this.clockLabel.Text = this.experiment.CurrentTime.ToString(westernFormatString);
@@ -132,17 +121,12 @@ namespace PetriPlanet.Gui
       this.simulationTimer.Interval = trackBarValue == maxSpeed ? 1 : 500 / trackBarValue;
     }
 
-    private static string FormatEnvironmentalPressure(float environmentalPressure)
-    {
-      return string.Format("Environmental Pressure: {0}", environmentalPressure);
-    }
-
     private static string FormatPopulation(int population)
     {
       return string.Format("Population: {0}", population);
     }
 
-    private static string FormatGenerations(ushort generations)
+    private static string FormatGenerations(int generations)
     {
       return string.Format("Generations: {0}", generations);
     }

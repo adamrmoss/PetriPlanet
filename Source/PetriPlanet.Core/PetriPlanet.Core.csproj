@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="guard_claws">
+      <HintPath>..\..\packages\guard_claws.0.0.8\lib\Net40\guard_claws.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -45,18 +48,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arrays.cs" />
+    <Compile Include="Collections\Arrays.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
-    <Compile Include="Direction.cs" />
+    <Compile Include="Maths\Direction.cs" />
     <Compile Include="Experiments\ExperimentSetup.cs" />
+    <Compile Include="Maths\DoubleExtensions.cs" />
+    <Compile Include="Maths\Position.cs" />
+    <Compile Include="Organisms\InstructionInterpreter.cs" />
+    <Compile Include="Organisms\Mutations.cs" />
     <Compile Include="Organisms\OrganismSetup.cs" />
-    <Compile Include="Organisms\Biomass.cs" />
     <Compile Include="Organisms\Instruction.cs" />
     <Compile Include="Organisms\Organism.cs" />
-    <Compile Include="Primes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Experiments\Experiment.cs" />
-    <Compile Include="Ushorts.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
