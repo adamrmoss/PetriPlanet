@@ -176,8 +176,9 @@ namespace PetriPlanet.Core.Organisms
     private void Move()
     {
       var steeringRoll = this.experiment.Random.NextDouble();
-      var steeringDirection = this.Steering < 0.5 && steeringRoll > this.Steering * 2 ? this.Direction.TurnLeft() :
-                              this.Steering > 0.5 && steeringRoll < (this.Steering - 0.5) * 2 ? this.Direction.TurnRight() : this.Direction;
+      var scaledSteering = this.Steering * 2 - 1.0;
+      var steeringDirection = scaledSteering < 0.0 && steeringRoll < -scaledSteering ? this.Direction.TurnLeft()  :
+                              scaledSteering > 0.0 && steeringRoll <  scaledSteering ? this.Direction.TurnRight() : this.Direction;
     }
 
     //public void DeductEnergy(double energy)
